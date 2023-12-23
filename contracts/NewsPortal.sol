@@ -1,0 +1,279 @@
+// SPDX-License-Identifier: MIT
+pragma solidity 0.8.22;
+
+//NAPOMENA: Razdvojiti  komentare po postu (valjda smo to uradile)
+//NAPOMENA: //MOZDA MOZE OVAKO KAKO SAM KRENULA za positions
+
+contract NewsPortal {
+
+    struct Post {
+        uint id;
+        string genre;
+        string title;
+        string content;
+        //Comment[] comments;  //this could not be used because Solidity does not support convesrion between memory and storage data types
+        uint commentsPerPostID;
+    }
+
+    struct Comment {
+        uint id;
+        uint postID;
+        address userWriter;
+        string content;
+        uint numberOfCharacters; //this is the length of the comment
+        uint numberOfLikes;
+        uint numberOfDislikes;
+    }
+
+    address private writer; //this is the one and only admin
+    address private usersAddress; //used to save users address from mapping, into a variable, so that user can be also deleted from users array
+
+    uint private id = 0; //ID, that will be used to count number of posts and increment for each new post, we started with 1, because that is more natural
+    uint private commentsPerPostID = 0; //number of comments per post
+    uint private userID = 1; //counter to count the number of users, we started with 1, because that is more natural
+
+    mapping(uint => Post) allPosts; // used to store all posts, key: postID, value: Post struct
+    mapping(string => Post[]) postPerGenre; //used to store posts per genre, key:genre, value:arrays of post structs
+    mapping(address => string) positions; //so that we know what menu to open //MOZDA MOZE OVAKO KAKO SAM KRENULA
+    mapping(uint => address) allUsers; //so that admin can manage all users, key: counter (no. of logged in user), value: user's address
+    mapping(uint => Comment[]) commentsPerPost; //key:post ID, value:array of comment structs
+    mapping(uint => uint) commentsCountPerPost;
+    mapping(string => mapping(uint => uint)) commentsCountPerPostPerGenre; // Updated mapping to include the comment count in each post per genre
+    mapping(uint => mapping(address => bool)) commentWritersPerPostIDMapping;  //key: post ID, value: another mapping(user's address => T/F), depending if they commented or not
+
+    Post[] posts;  //list of all posts 
+    Comment[] comments; //list of all comments 
+
+    address[] users; //list of all users to view because mapping allUsers is not iterable
+    address[] commentWritersPerPostArray; //? ne znam za sta je ovo
+
+    event newPostCreatedEvent(uint id, string genre, string title, string content);
+    event postTitleUpdatedEvent(uint id, string newTitle);
+    event postContentUpdatedEvent(uint id, string newContent);
+    event postGenreUpdatedEvent(uint id, string newGenre);
+    event likeCommentAddedEvent(uint postID, uint commentID, uint numberOfLikes);
+    event dislikeCommentAddedEvent(uint postID, uint commentID, uint numberOfDislikes);
+    event commentWrittenEvent(uint postID, uint commentID);
+    event userAddedEvent(address indexed userAddress, string position);
+    event userDeletedEvent(address indexed userAddress);
+
+
+    //modifiers to increment and decrement number of posts and users, and to increment number of comments
+
+    modifier incrementPostCounter(){  
+        _;
+        id += 1;
+    }
+
+    modifier decrementPostCounter(){
+        _;
+        id -= 1;
+    }
+
+    modifier incrementUserCount(){
+        _;
+        userID += 1;
+    }
+
+    modifier decrementUserCount(){
+        _;
+        userID -= 1;
+    }
+
+    modifier incrementCommentCounter(){
+        _;
+        commentsPerPostID += 1;
+    }
+
+    //access control modifiers, some actions are allowed only to admin, and some are prohibited to admin
+
+    modifier onlyAdmin(){
+        require(msg.sender == writer, "You need to be an admin to perform this action.");
+        _;
+    }
+
+    modifier onlyUser(){
+        require(msg.sender != writer, "You have to be logged in as a user for this.");
+        _;
+    }
+
+    //modifier to check comment character limit
+
+    modifier checkCommentLength(string memory comment) {
+        require(bytes(comment).length <= 250, "You went over character limit of 250!");
+        _;
+    }
+
+    //modifier to restrict users to write only one comment per post
+
+    modifier spamControl(uint _postID) {
+        require(!commentWritersPerPostIDMapping[_postID][msg.sender], "You can write only one comment per post.");
+        _;
+    }
+
+    //modifier to see if the user already logged in one, 
+    //if it did, don't memorize its data multiple times
+
+    modifier userNotExists(address _addr) {
+        require(bytes(positions[_addr]).length == 0, "User already exists");
+        _;
+    }       
+
+
+    constructor(){
+        writer = msg.sender; //this is the one and only admin
+        positions[msg.sender] = "Administrator";
+    }
+
+    //function to write posts by an admin
+    function writePosts(string memory _genre, string memory _title, string memory _content) external incrementPostCounter onlyAdmin {
+
+        // First comment is written by the owner
+        /*string memory firstComment = "Thank you for reading my post. Feel free to leave a comment.";  //--> da li nam ovo uopce sad treba
+        Comment memory writerComment = Comment( commentsPerPostID, id,  msg.sender, firstComment, 74, 0, 0);
+        comments.push(writerComment);
+
+        //each post struct will have a count of its comments
+        uint numberOfCommentsPerPost = comments.length;*/
+
+        // Create a new Post 
+        Post memory newPost = Post(id, _genre, _title, _content, 0);
+        posts.push(newPost);
+
+        // we also need to add new post to both mappings that are reated to post structs
+        postPerGenre[_genre].push(newPost);
+        allPosts[id] = newPost;
+
+        //emit an event that the new post is created
+        emit newPostCreatedEvent(id, _genre, _title, _content);
+    }
+
+    //function to delete posts by an admin
+    //posts need to be deleted in 3 seperate places, two mappings and one array
+    function deletePost(uint _id) external onlyAdmin decrementPostCounter {
+        string memory extractGenre = allPosts[_id].genre;
+
+        // first, we found index of the post to delete
+        uint indexToDelete = findPostIndex(postPerGenre[extractGenre], _id);
+
+        // If the post is in right array, by guessing the right genre, then delete it
+        if (indexToDelete < postPerGenre[extractGenre].length) {
+            // we also swapped positions of the last item in the array and the one we want to delete
+            postPerGenre[extractGenre][indexToDelete] = postPerGenre[extractGenre][postPerGenre[extractGenre].length - 1];
+            postPerGenre[extractGenre].pop();
+        }
+
+        //It also needs to be deleted from posts, array of structs
+        //Same procedure as above will be followed
+        uint postsIndexToDelete = findPostIndex(posts, _id);
+
+        if (postsIndexToDelete < posts.length) {
+            posts[postsIndexToDelete] = posts[posts.length - 1];
+            posts.pop();
+        }
+
+        // also delete the post from other mapping as well
+        delete allPosts[_id];
+        
+    }
+
+    // This will return index of the post in the array
+    function findPostIndex(Post[] storage postsArray, uint postId) internal view returns (uint) {
+         for (uint i = 0; i < postsArray.length; i++) {
+            if (postsArray[i].id == postId) {
+                return i;
+            }
+        }
+        // it will return array if there is no match
+        return postsArray.length; 
+    }
+
+
+    //Functions to update post, by one of the three main features and emit an event for that
+    function updateTitle(uint _id, string memory _newTitle) external onlyAdmin{
+        allPosts[_id].title = _newTitle;
+        uint allPostsIndexToUpdate = findPostIndex(posts, _id);
+
+        // If the post is found in the array, update its title
+        if (allPostsIndexToUpdate < posts.length) {
+            posts[allPostsIndexToUpdate].title = _newTitle;
+        }
+
+        // Find the index of the post in the array based on its genre
+        string memory extractGenre = allPosts[_id].genre;
+        uint genreIndexToUpdate = findPostIndex(postPerGenre[extractGenre], _id);
+
+        // If the post is found in the genre array, update its title
+        if (genreIndexToUpdate < postPerGenre[extractGenre].length) {
+            postPerGenre[extractGenre][genreIndexToUpdate].title = _newTitle;
+        }
+
+        emit postTitleUpdatedEvent(_id, _newTitle);
+    }
+
+    // Function to update post content, it follows the same procedure as the function to update title
+    function updateContent(uint _id, string memory _newContent) external onlyAdmin {
+        allPosts[_id].content = _newContent;
+
+        uint allPostsIndexToUpdate = findPostIndex(posts, _id);
+
+        // If the post is found in the array, update its content
+        if (allPostsIndexToUpdate < posts.length) {
+            posts[allPostsIndexToUpdate].content = _newContent;
+        }
+
+        // Find the index of the post in the array based on its genre
+        string memory extractGenre = allPosts[_id].genre;
+        uint genreIndexToUpdate = findPostIndex(postPerGenre[extractGenre], _id);
+
+        // If the post is found in the genre array, update its content
+        if (genreIndexToUpdate < postPerGenre[extractGenre].length) {
+            postPerGenre[extractGenre][genreIndexToUpdate].content = _newContent;
+        }
+
+        emit postContentUpdatedEvent(_id, _newContent);
+    }
+
+    //Function to update post genre, it follows the same procedure as the function to update title and content
+    function updateGenre(uint _id, string memory _newGenre) external onlyAdmin {
+        allPosts[_id].genre = _newGenre;
+
+        uint allPostsIndexToUpdate = findPostIndex(posts, _id);
+
+        // If the post is found in the array, update its content
+        if (allPostsIndexToUpdate < posts.length) {
+            posts[allPostsIndexToUpdate].genre = _newGenre;
+        }
+
+        // Find the index of the post in the array based on its genre
+        string memory extractGenre = allPosts[_id].genre;
+
+        uint genreIndexToUpdate = findPostIndex(postPerGenre[extractGenre], _id);
+
+        // If the post is found in the genre array, update its genre
+        if (genreIndexToUpdate < postPerGenre[extractGenre].length) {
+            postPerGenre[extractGenre][genreIndexToUpdate].genre = _newGenre;
+        }
+
+        emit postGenreUpdatedEvent(_id, _newGenre);
+    }
+
+    //function to get current number of posts
+    function getCurrentPostCount() external view returns (uint) {
+        return id;
+    }
+ 
+
+}
+
+    
+
+
+
+
+
+
+
+
+
+
