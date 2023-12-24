@@ -262,7 +262,161 @@ contract NewsPortal {
     function getCurrentPostCount() external view returns (uint) {
         return id;
     }
- 
+
+       function writeComments(uint _postID, string memory _content) external onlyUser incrementCommentCounter checkCommentLength(_content) spamControl(_postID) returns (uint, address, string memory, uint, uint, uint) {
+        uint _numberOfCharacters = bytes(_content).length;
+        Comment memory newComment = Comment(commentsPerPostID, _postID,  msg.sender, _content, _numberOfCharacters, 0, 0);
+        comments.push(newComment);
+    
+        // Update the mapping commentsPerPost
+        commentsPerPost[_postID].push(newComment);
+
+        // Update the mapping to mark the user as a comment writer for this post
+        commentWritersPerPostIDMapping[_postID][msg.sender] = true;
+
+        // Update the comment count for the post
+        commentsCountPerPost[_postID]++;
+
+        // Update the comment count in the Post struct
+        allPosts[_postID].commentsPerPostID = commentsCountPerPost[_postID];
+
+        // Update the comment count for the post per genre
+        string memory genre = allPosts[_postID].genre;
+        uint numberOfCommentsPerPost = commentsCountPerPost[_postID];
+
+        // Update the post in the posts array
+       updatePostCommentCount(posts, _postID, numberOfCommentsPerPost);
+
+        // Update the post in the postPerGenre mapping
+        updatePostCommentCount(postPerGenre[genre], _postID, numberOfCommentsPerPost);
+
+        emit commentWrittenEvent(_postID, newComment.id);
+
+        return (newComment.id, newComment.userWriter, newComment.content, newComment.numberOfCharacters, newComment.numberOfLikes, newComment.numberOfDislikes);
+    }
+
+    function updatePostCommentCount(Post[] storage postsArray, uint _postID, uint count) internal {
+        uint postIndexToUpdate = findPostIndex(postsArray, _postID);
+            if (postIndexToUpdate < postsArray.length) {
+                postsArray[postIndexToUpdate].commentsPerPostID = count;
+            }
+    }
+
+    //function to get number of comments per post
+    function getCommentCountPerPost(uint _postID) external view returns (uint) {
+        return allPosts[_postID].commentsPerPostID;
+    }
+
+    // function to like a comment
+    function likeComment(uint _postID, uint _commentID) external onlyUser returns (uint) {
+        // we need to ensure that the comment actually exists
+        require(_commentID < comments.length, "Invalid comment ID");
+        comments[_commentID].numberOfLikes += 1;
+
+        // also, update the feature of comments in the mapping commentsPerPost
+        uint postId = comments[_commentID].postID;
+        commentsPerPost[postId][_commentID].numberOfLikes += 1;
+
+        emit likeCommentAddedEvent(_postID, _commentID, comments[_commentID].numberOfLikes);
+    
+        return comments[_commentID].numberOfLikes;
+    }   
+
+    // function to dislike a comment
+    function dislikeComment(uint _postID, uint _commentID) external onlyUser returns (uint) {
+        require(_commentID < comments.length, "Invalid comment ID");
+        comments[_commentID].numberOfLikes += 1;
+
+        uint postId = comments[_commentID].postID;
+        commentsPerPost[postId][_commentID].numberOfDislikes += 1;
+
+        emit likeCommentAddedEvent(_postID, _commentID, comments[_commentID].numberOfDislikes);
+    
+        return comments[_commentID].numberOfLikes;
+    }   
+
+    // function to add a user, so we know their address but also for admin to see a list of them
+    //user has to be added to all places from where it will be called
+    function addAUser(address _addr) external incrementUserCount userNotExists(_addr) {
+        allUsers[userID] = _addr;
+        users.push(_addr);
+        positions[_addr] = "User";
+        emit userAddedEvent(_addr, "User");
+    }
+
+    
+
+    //Deleting users based on address because that is unique
+    function deleteUser(address _userAddress) external onlyAdmin decrementUserCount {
+        // Find the index of the user in the array
+        uint indexToDelete = findUserIndex(users, _userAddress);
+
+        // If the user is found in the array, remove it
+        if (indexToDelete < users.length) {
+            // Swap the user to delete with the last user in the array
+            users[indexToDelete] = users[users.length - 1];
+            // Remove the last element from the array
+            users.pop();
+        emit userDeletedEvent(_userAddress);
+        }
+
+        // Remove the user from the mapping
+        delete positions[_userAddress];
+        // also delete it from the mapping
+        delete allUsers[userID];
+}
+
+    // Function to find the index of a user in an array
+    function findUserIndex(address[] storage usersArray, address userAddress) internal view returns (uint) {
+        for (uint i = 0; i < usersArray.length; i++) {
+            if (usersArray[i] == userAddress) {
+                return i;
+            }
+        }
+        return usersArray.length; // Return array length if not found
+    }
+
+    //functions to getAll to be called after refreshing, getAll is needed after every event
+
+    //function to view all posts (both by admin and users --> joint function)
+    //to be called after updating title and/or content, we will see
+    //needed for the event newPostCreatedEvent
+    function getAllPosts() external view returns(Post[] memory){
+        return posts;
+    }
+
+    /*I think that for these three events:
+    1.postTitleUpdatedEvent
+    2.postContentUpdatedEvent
+    3.postGenreUpdatedEvent
+    we can use both function getAllPosts, and getAllPostsByGenre, but we will see based on frontend implementation*/
+
+    //function to view all posts based on genre
+    //this one will be called after updating genre, but also can be called after updating title and/or content, we will see
+    function getAllPostsPerGenre(string memory _wantedGenre) external view returns(Post[] memory){
+        return postPerGenre[_wantedGenre];
+    }
+
+    //View all users
+    //needed for these two events, userAddedEvent and userDeletedEvent
+    function getAllUsers() external view onlyAdmin returns (address[] memory) {
+        return users; //for this, we needed to have that array users[]
+    }
+
+    //function to get all comments per post
+    //needed for event commentWrittenEvent
+    function getCommentsPerPost(uint _postID) external view returns (Comment[] memory){
+        return commentsPerPost[_postID];
+    }
+
+    // I guesss that these two events can be put together for each comment,  likeCommentAddedEvent and dislikeCommentAddedEvent
+    function getNumberOfLikesAndDislikesPerComment(uint _postID, uint _commentID) external view returns (uint, uint) {
+        require(_postID < posts.length, "Invalid post ID"); //postID has to be less than or equal because we put by default that the post ID starts from one
+        require(_commentID < commentsPerPost[_postID].length, "Invalid comment ID");
+
+        Comment memory comment = commentsPerPost[_postID][_commentID];
+        return (comment.numberOfLikes, comment.numberOfDislikes);
+    }
 
 }
 
