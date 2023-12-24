@@ -115,10 +115,20 @@ contract NewsPortal {
     //if it did, don't memorize its data multiple times
 
     modifier userNotExists(address _addr) {
-        require(bytes(positions[_addr]).length == 0, "User already exists");
+        require(bytes(positions[_addr]).length == 0, "User already exists in positions mapping");
+        require(allUsers[userID] != _addr, "User already exists in allUsers mapping");
+        require(!userExistsInArray(_addr), "User already exists in users array");
         _;
-    }       
+    }
 
+    function userExistsInArray(address _addr) internal view returns (bool) {
+        for (uint i = 0; i < users.length; i++) {
+            if (users[i] == _addr) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     constructor(){
         writer = msg.sender; //this is the one and only admin
