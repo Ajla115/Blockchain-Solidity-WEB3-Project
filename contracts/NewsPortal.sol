@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity 0.8.22;
+pragma solidity 0.8.19;
 
 //NAPOMENA: Razdvojiti  komentare po postu (valjda smo to uradile)
 //NAPOMENA: //MOZDA MOZE OVAKO KAKO SAM KRENULA za positions
@@ -40,6 +40,7 @@ contract NewsPortal {
     mapping(uint => uint) commentsCountPerPost;
     mapping(string => mapping(uint => uint)) commentsCountPerPostPerGenre; // Updated mapping to include the comment count in each post per genre
     mapping(uint => mapping(address => bool)) commentWritersPerPostIDMapping;  //key: post ID, value: another mapping(user's address => T/F), depending if they commented or not
+    mapping(address => uint256) public userIDMapping; 
 
     Post[] posts;  //list of all posts 
     Comment[] comments; //list of all comments 
@@ -114,12 +115,12 @@ contract NewsPortal {
     //modifier to see if the user already logged in one, 
     //if it did, don't memorize its data multiple times
 
-    modifier userNotExists(address _addr) {
+   /* modifier userNotExists(address _addr) {
         require(bytes(positions[_addr]).length == 0, "User already exists in positions mapping");
         require(allUsers[userID] != _addr, "User already exists in allUsers mapping");
         require(!userExistsInArray(_addr), "User already exists in users array");
         _;
-    }
+    }*/
 
     function userExistsInArray(address _addr) internal view returns (bool) {
         for (uint i = 0; i < users.length; i++) {
@@ -347,14 +348,21 @@ contract NewsPortal {
 
     // function to add a user, so we know their address but also for admin to see a list of them
     //user has to be added to all places from where it will be called
-    function addAUser(address _addr) external incrementUserCount userNotExists(_addr) {
-        allUsers[userID] = _addr;
-        users.push(_addr);
-        positions[_addr] = "User";
-        emit userAddedEvent(_addr, "User");
-    }
+    function addAUser(address _addr) external incrementUserCount /*userNotExists(_addr)*/ {
+        if (userIDMapping[_addr] == 0) {
+            //uint256 newUserID = userCount + 1;
+            userIDMapping[_addr] = userID;
+            allUsers[userID] = _addr;
+            users.push(_addr);
+            positions[_addr] = "User";
+            //userCount++;
 
+            emit userAddedEvent(_addr, "User");
+        }
+    }
     
+
+   
 
     //Deleting users based on address because that is unique
     function deleteUser(address _userAddress) external onlyAdmin decrementUserCount {
@@ -370,6 +378,8 @@ contract NewsPortal {
         emit userDeletedEvent(_userAddress);
         }
 
+        //delete user from userID mapping
+        delete userIDMapping[_userAddress];
         // Remove the user from the mapping
         delete positions[_userAddress];
         // also delete it from the mapping
@@ -427,6 +437,7 @@ contract NewsPortal {
         Comment memory comment = commentsPerPost[_postID][_commentID];
         return (comment.numberOfLikes, comment.numberOfDislikes);
     }
+    
 
 }
 
