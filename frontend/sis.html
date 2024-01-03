@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+        integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"></script>
+    <title>Student Information System</title>
+ 
+    <style>
+        html,
+        body {
+            font-size: 16px;
+            margin: 0px;
+        }
+ 
+        .login__sis__wrap {
+            position: relative;
+            background-image: url(https://sis.ibu.edu.ba/assets/login-bg.webp);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: top center;
+            min-height: 100vh;
+ 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+ 
+        .login__sis__wrap .logo__elem {
+            margin-top: 6rem;
+        }
+ 
+        .login__sis__wrap footer {
+            margin-bottom: 3rem;
+        }
+ 
+        .login__sis__wrap footer p {
+            color: #bababa;
+            text-align: center;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5rem;
+        }
+ 
+        .login__sis__wrap .form__wrap {
+            position: relative;
+            display: block;
+            background-color: #ffffff;
+            width: 35.9375rem;
+            flex-shrink: 0;
+        }
+ 
+        .login__sis__wrap .form__wrap .headline__wrap {
+            border-bottom: 1px solid #efefef;
+            padding: 1.9rem 3.44rem;
+        }
+ 
+        .login__sis__wrap .form__wrap .headline__wrap .title {
+            color: #003a6d;
+            font-family: "Oswald", sans-serif;
+            font-size: 2.125rem;
+            font-weight: 400;
+            line-height: 140%;
+            text-transform: uppercase;
+            margin: 0;
+        }
+ 
+        .login__sis__wrap .form__wrap .headline__wrap .title span {
+            color: #8b8d92;
+            font-family: "Oswald", sans-serif;
+            font-size: 2.125rem;
+            font-weight: 250;
+            line-height: 140%;
+            text-transform: uppercase;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content {
+            padding: 1.9rem 3.44rem;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content input {
+            border: 1px solid #e5e5e5;
+            background: rgba(255, 255, 255, 0.68);
+            width: 100%;
+            height: 3.5rem;
+            flex-shrink: 0;
+            padding: 1rem 1.25rem;
+ 
+            color: #003a6d;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5rem;
+            transition: cubic-bezier(0.165, 0.84, 0.44, 1) all 0.3s;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content input::placeholder {
+            color: #707070;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5rem;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content input:focus {
+            border-color: #003a6d;
+            outline: none;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .info__elem {
+            color: rgba(6, 19, 31, 0.39);
+            font-family: "Inter", sans-serif;
+            font-size: 0.7rem;
+            font-style: italic;
+            font-weight: 400;
+            line-height: 140%;
+            margin-top: 0.31rem;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .submit__btn {
+            color: white;
+            display: flex;
+            padding: 1.375rem 2rem;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            background-color: #003a6d;
+            border: 0;
+            margin-top: 1.37rem;
+            transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) all 0.3s;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .submit__btn span {
+            color: #fff;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            font-style: normal;
+            font-weight: 500;
+            line-height: 1.25rem;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .submit__btn:hover,
+        .login__sis__wrap .form__wrap .form__content .submit__btn:focus {
+            background-color: #937947;
+        }
+ 
+        .forget__password__wrap {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .forget__password {
+            display: inline-flex;
+            color: #707070;
+            text-align: center;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5rem;
+            text-decoration: underline;
+            text-decoration-color: transparent;
+            transition: cubic-bezier(0.165, 0.84, 0.44, 1) all 0.3s;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .forget__password:hover {
+            color: #003a6d;
+            text-decoration: underline;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .alert.alert-danger {
+            display: flex;
+            gap: 0.7rem;
+            align-items: center;
+            justify-content: flex-start;
+        }
+ 
+        .login__sis__wrap .form__wrap .form__content .alert.alert-danger span {
+            text-align: center;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5rem;
+        }
+ 
+        @media screen and (max-device-width: 640px) {
+ 
+            html,
+            body {
+                font-size: 13px;
+            }
+ 
+            .login__sis__wrap .form__wrap {
+                width: 95%;
+                flex-shrink: 0;
+                margin-top: -10rem;
+            }
+ 
+            .login__sis__wrap .form__wrap .headline__wrap {
+                padding: 1.9rem 2rem;
+            }
+ 
+            .login__sis__wrap .form__wrap .form__content {
+                padding: 1.9rem 2rem;
+            }
+        }
+ 
+        @media only screen and (min-width: 992px) {
+ 
+            html,
+            body {
+                font-size: 13px;
+            }
+        }
+ 
+        @media only screen and (min-width: 1200px) {
+ 
+            html,
+            body {
+                font-size: 16px;
+            }
+        }
+ 
+        .student-area,
+        .professor-area {
+            text-align: center;
+        }
+ 
+        .professor-area input {
+            border: 1px solid #e5e5e5;
+            background: rgba(255, 255, 255, 0.68);
+            margin-top: 10px;
+            flex-shrink: 0;
+            padding: 1rem 1.25rem;
+            color: #003a6d;
+            font-family: "Inter", sans-serif;
+            font-size: 0.875rem;
+            font-weight: 400;
+            line-height: 1.5rem;
+            transition: cubic-bezier(0.165, 0.84, 0.44, 1) all 0.3s;
+        }
+ 
+        .professor-area button {
+            display: flex;
+            padding: 1.375rem 2rem;
+            justify-content: center;
+            align-items: center;
+            background-color: #003a6d;
+            color: white;
+            border: 0;
+            margin: auto;
+            width: 100%;
+            max-width: 376px;
+            margin-top: 1rem;
+            transition: cubic-bezier(0.175, 0.885, 0.32, 1.275) all 0.3s;
+        }
+ 
+        .professor-area button:hover,
+        .professor-area button:focus {
+            background-color: #937947;
+        }
+    </style>
+</head>
+ 
+<body>
+    <div class="login__sis__wrap">
+        <div class="logo__elem">
+            <figure class="image">
+                <img class="login-logo login-6" src="https://sis.ibu.edu.ba/assets/ibu-logo.svg"
+                    alt="International Burch University">
+            </figure>
+        </div>
+        <div class="form__wrap" id="login-content">
+            <form action="javascript:;" class="login-form" method="post" novalidate="novalidate">
+                <div class="headline__wrap">
+                    <h1 class="title">Welcome! <span>Login to continue.</span></h1>
+                </div>
+                <div class="form__content">
+                    <p>Please log in using your MetaMask wallet.</p>
+                    <button class="submit__btn" id="connect">Connect to MetaMask</button>
+ 
+                </div>
+            </form>
+        </div>
+        <div class="form__wrap student-area" id="student-area" hidden></div>
+        <div class="form__wrap professor-area" id="professor-area" hidden></div>
+        <footer>
+            <p>© <span id="currentYear">2023</span> International Burch University</p>
+        </footer>
+    </div>
+ 
+ 
+    <p id="connectedAddress" style="display: none;">Connected address: <span></span></p>
+ 
+ 
+</body>
+<script>
+    const abi = [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "_studentAddress", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "_id", "type": "uint256" }], "name": "AddedCourse", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "_student", "type": "address" }], "name": "AddedGrade", "type": "event" }, { "inputs": [{ "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "address", "name": "_teacherAddress", "type": "address" }], "name": "addCourse", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "address", "name": "_student", "type": "address" }, { "internalType": "uint256", "name": "_grade", "type": "uint256" }], "name": "addGrade", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "address", "name": "_studentAddress", "type": "address" }], "name": "addStudentCourse", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getCoursesByTeacher", "outputs": [{ "components": [{ "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "address", "name": "teacher", "type": "address" }], "internalType": "struct SimpleSIS.Course[]", "name": "", "type": "tuple[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getRole", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getStudentCourses", "outputs": [{ "components": [{ "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "address", "name": "teacher", "type": "address" }], "internalType": "struct SimpleSIS.Course[]", "name": "", "type": "tuple[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getStudentGrades", "outputs": [{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }, { "internalType": "string[]", "name": "", "type": "string[]" }, { "internalType": "uint256[][]", "name": "", "type": "uint256[][]" }], "stateMutability": "view", "type": "function" }]
+    const address = "0xC2dfea61b8C0f9423ea0a15261eDb2dD9Dd80EAC"
+ 
+    $('#connect').click(async function () {
+        if (window.ethereum) {
+            let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            window.web3 = new Web3(window.ethereum);
+ 
+            const contract = new web3.eth.Contract(abi, address);
+            const role = await contract.methods.getRole().call({ from: addresses[0] });
+ 
+            console.log("role:" + role);
+            $('#connect').hide();
+            $('#login-content').hide();
+            $('#connectedAddress').css('display', 'block');
+            $('#connectedAddress > span').html(addresses[0]);
+
+            // List of admin addresses
+            const adminAddresses = [
+            "0xf47bC986343F454742f242a3Fb4Fc5cA2E952B6F",
+            "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"
+        ];
+
+        // Check if the current address is an admin address
+        if (adminAddresses.includes(addresses[0])) {
+            $('#adminDiv').show();
+            // Call admin-specific function if needed
+            // adminFunction();
+        } else {
+           
+                $('#userDiv').show();
+                //getStudentCourses();
+            } 
+        }
+    }
+);
+ 
+    async function getStudentCourses() {
+        let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const contract = new web3.eth.Contract(abi, address);
+        let courses = await contract.methods.getStudentGrades().call({ from: addresses[0] });
+ 
+        let content = '';
+        console.log(courses[0])
+        for (let i = 0; i < courses[0].length; i++) {
+            console.log(courses[0][i])
+            content += `
+                <p>
+                    <b>Course ID: ${courses[0][i]}</b>
+                    <br>
+                    Course Name: ${courses[1][i]}
+                    <br>
+                    Grades: ${courses[2][i]}
+                </p>
+            `
+        }
+        $('#student-area').html(content);
+ 
+        contract.events.AddedGrade()
+            .on('data', function (event) {
+                console.log(event);
+                getStudentCourses();
+            })
+ 
+    }
+ 
+    async function getCoursesByTeacher() {
+        let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const contract = new web3.eth.Contract(abi, address);
+        let courses = await contract.methods.getCoursesByTeacher().call({ from: addresses[0] });
+ 
+        let content = '';
+ 
+        for (let i = 0; i < courses.length; i++) {
+ 
+            content += `
+                <p>
+                    <b>Course ID: ${courses[i].id}</b>
+                    <br>
+                    Course Name: ${courses[i].name}
+                    <br>
+                    <input type="text" id="${courses[i].id}" placeholder="Enter student address">
+                    <input type="text" id="grade${courses[i].id}" placeholder="Enter student grade">
+                    <button onClick="addGrade(${courses[i].id})">Add grade</button>
+                </p>
+            `
+        }
+        $('#professor-area').html(content);
+ 
+ 
+ 
+    }
+ 
+    async function addGrade(id) {
+ 
+        const contract = new web3.eth.Contract(abi, address);
+        let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+ 
+        contract.methods.addGrade(id, studentAddress, studentGrade).send({ from: addresses[0] }).then(function (result) {
+            console.log(result);
+        })
+ 
+    }
+</script>
+ 
+</html>

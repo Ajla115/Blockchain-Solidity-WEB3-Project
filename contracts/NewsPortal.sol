@@ -199,6 +199,11 @@ contract NewsPortal {
         return postsArray.length; 
     }
 
+    
+    function getRole() external view returns (string memory) {
+       return positions[msg.sender];
+   }
+
 
     //Functions to update post, by one of the three main features and emit an event for that
     function updateTitle(uint _id, string memory _newTitle) external onlyAdmin{
