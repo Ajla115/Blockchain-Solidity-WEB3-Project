@@ -329,17 +329,24 @@
 
         // Check if the current address is an admin address
         if (adminAddresses.includes(addresses[0])) {
-            $('#adminDiv').show();
+
+            $('#admin-area').show();
             // Call admin-specific function if needed
             // adminFunction();
         } else {
-           
-                $('#userDiv').show();
-                //getStudentCourses();
-            } 
+            // Open user part
+            if (role === "student") {
+                $('#student-area').show();
+                getStudentCourses();
+            } else {
+                $('#professor-area').show();
+                getCoursesByTeacher();
+            }
         }
     }
-);
+});
+ 
+
  
     async function getStudentCourses() {
         let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
