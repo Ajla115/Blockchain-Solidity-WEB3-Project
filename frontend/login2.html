@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <!-- Include the latest version of Web3 before the older version -->
-    <!--<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>-->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"></script>
+     <!--<script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>-->
     <title>Document</title>
 </head>
 <body>
@@ -13,98 +13,86 @@
     <button id="connect">Connect to MetaMask</button>
     <p id="connectedAddress" style="display: none;">Connected address: <span></span></p>
 
-    <!-- Div for Admin -->
-    <div id="adminDiv" style="display: none;">
-        <!-- Add your admin content here -->
-        <p>Welcome Admin!</p>
+<!-- Div for Admin -->
+<div id="adminDiv" style="display: none;">
+    <!-- Add your admin content here -->
+    <p>Welcome Admin!</p>
+
+    <!-- Write Posts -->
+    <div id="writePosts" style="display: none;">
+        <h2>Create Post</h2>
+        <form id="postForm">
+            <div class="form-group">
+                <label for="genre">Genre</label>
+                <input type="text" class="form-control" id="genre" required>
+            </div>
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" required>
+            </div>
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea class="form-control" id="content" rows="5" required></textarea>
+            </div>
+            <button type="button" class="btn btn-primary" id="submitPost">Submit Post</button>
+        </form>
     </div>
+</div>
 
-    <!-- Div for User -->
-    <div id="userDiv" style="display: none;">
-        <!-- Add your user content here -->
-        <p>Welcome User!</p>
-    </div>
+<script>
+    $(document).ready(function () {
+        const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"}],"name":"commentWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"numberOfDislikes","type":"uint256"}],"name":"dislikeCommentAddedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"numberOfLikes","type":"uint256"}],"name":"likeCommentAddedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"newContent","type":"string"}],"name":"postContentUpdatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"newGenre","type":"string"}],"name":"postGenreUpdatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"newTitle","type":"string"}],"name":"postTitleUpdatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"userAddress","type":"address"},{"indexed":false,"internalType":"string","name":"position","type":"string"}],"name":"userAddedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"userAddress","type":"address"}],"name":"userDeletedEvent","type":"event"},{"inputs":[{"internalType":"address","name":"_addr","type":"address"}],"name":"addAUser","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_userAddress","type":"address"}],"name":"deleteUser","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"uint256","name":"_commentID","type":"uint256"}],"name":"dislikeComment","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getAllUsers","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentCountPerPost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentsPerPost","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"postID","type":"uint256"},{"internalType":"address","name":"userWriter","type":"address"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"numberOfCharacters","type":"uint256"},{"internalType":"uint256","name":"numberOfLikes","type":"uint256"},{"internalType":"uint256","name":"numberOfDislikes","type":"uint256"}],"internalType":"struct NewsPortal.Comment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"uint256","name":"_commentID","type":"uint256"}],"name":"getNumberOfLikesAndDislikesPerComment","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getRole","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"uint256","name":"_commentID","type":"uint256"}],"name":"likeComment","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"string","name":"_newContent","type":"string"}],"name":"updateContent","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"string","name":"_newGenre","type":"string"}],"name":"updateGenre","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"string","name":"_newTitle","type":"string"}],"name":"updateTitle","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userIDMapping","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeComments","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+        //const contract = new web3.eth.Contract(abi, "0x1CB3C40e64A652289C02d610D3E2227b037756cf"); //this is contract address    
+        //const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191";
 
-    <div id="candidates"></div>
+        $('#connect').click(async function () {
 
-    <script>
-        const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"_candidateId","type":"uint256"}],"name":"VoteSubmitted","type":"event"},{"inputs":[{"internalType":"string","name":"_name","type":"string"}],"name":"addCandidate","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getCandidates","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"name","type":"string"},{"internalType":"uint256","name":"votes","type":"uint256"}],"internalType":"struct SimpleElection.Candidate[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"vote","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-
-       /* $('#connect').click(async function () {
-            if (window.ethereum) {
-                try {
-                    let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    window.web3 = new Web3(window.ethereum);
-
-                    console.log(addresses);
-
-                    $('#connect').hide();
-                    $('#connectedAddress').css('display', 'block');
-                    $('#connectedAddress > span').html(addresses);
-
-                    // Use the web3 instance you have already created
-                    const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191";
-                    const contract = new window.web3.eth.Contract(abi, "0x35Ef0574b7E97a05d0983A1F6470F217Ee4E73Fe1");
-
-                    // Check if the connected address is admin's address
-                    if (addresses[0].toLowerCase() === adminAddress.toLowerCase()) {
-                        $('#adminDiv').css('display', 'block');
-                    } else {
-                        $('#userDiv').css('display', 'block');
-                    }
-
-                    // Call the function after connecting
-                    //getAllPosts();
-                } catch (error) {
-                    console.error(error);
-                }
-            }
-        })
-
-        // Add your functions (e.g., getAllPosts, getCandidates, etc.)
-
-    */
-    $('#connect').click(async function () {
-        try {
-            // Check if MetaMask is installed
-            if (typeof window.ethereum === 'undefined') {
-                throw new Error('MetaMask not detected. Please install MetaMask.');
-            }
-
-            // Request account access
-            const addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
-            
-            // Check if there are any connected addresses
-            if (!addresses || addresses.length === 0) {
-                throw new Error('No address provided. Please connect your wallet.');
-            }
-
-            // Set up web3
+        if (window.ethereum) {
+            let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
             window.web3 = new Web3(window.ethereum);
+ 
+            //const contract = new web3.eth.Contract(abi, address);
+            const contract = new web3.eth.Contract(abi, "0x1CB3C40e64A652289C02d610D3E2227b037756cf");
+            //const role = await contract.methods.getRole().call({ from: addresses[0] });
+            const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"; //JA
+            const lowerCaseAdminAddress = adminAddress.toLowerCase();
 
-            console.log(addresses);
-
+            const adminAddress2 = "0xBFfB885Ee9adeF105Ced97e74577606eF1a85284"; //ILMA
+            const lowerCaseAdminAddress2 = adminAddress2.toLowerCase();
+ 
+            //console.log("role:" + role);
             $('#connect').hide();
+            $('#login-content').hide();
             $('#connectedAddress').css('display', 'block');
             $('#connectedAddress > span').html(addresses[0]);
 
-            // Use the web3 instance you have already created
-            const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191";
-            const contract = new window.web3.eth.Contract(abi, "0x35Ef0574b7E97a05d0983A1F6470F217Ee4E73Fe1");
+        if (addresses[0] === lowerCaseAdminAddress || addresses[0] === lowerCaseAdminAddress2) {
+            $('#adminDiv').show();
+            $('#writePosts').show();
 
-            // Check if the connected address is admin's address
-            if (addresses[0].toLowerCase() === adminAddress.toLowerCase()) {
-                $('#adminDiv').css('display', 'block');
-            } else {
-                $('#userDiv').css('display', 'block');
-            }
+            $('#writePosts').click(function () {
+                // Show the create post form
+                $('#writePosts').show();
+            });
 
-            // Call the function after connecting
-            // getAllPosts();
-        } catch (error) {
-            console.error('Error during connection:', error.message);
+            // Handle submit post button click
+            $('#submitPost').click(async function () {
+                const genre = $('#genre').val();
+                const title = $('#title').val();
+                const content = $('#content').val();
+
+                // Call the writePosts function here
+                try {
+                    await contract.methods.writePosts(genre, title, content).send({ from: addresses[0] });
+                    alert('Post created successfully!');
+                } catch (error) {
+                    console.error('Error creating post:', error);
+                    alert('Error creating post. Please try again.');
+                }
+            });
         }
-    });
+    }})});
+
+
 </script>
-</body>
-</html>
+

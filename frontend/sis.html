@@ -304,7 +304,7 @@
  
 </body>
 <script>
-    const abi = [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "_studentAddress", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "_id", "type": "uint256" }], "name": "AddedCourse", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "_student", "type": "address" }], "name": "AddedGrade", "type": "event" }, { "inputs": [{ "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "address", "name": "_teacherAddress", "type": "address" }], "name": "addCourse", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "address", "name": "_student", "type": "address" }, { "internalType": "uint256", "name": "_grade", "type": "uint256" }], "name": "addGrade", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "address", "name": "_studentAddress", "type": "address" }], "name": "addStudentCourse", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getCoursesByTeacher", "outputs": [{ "components": [{ "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "address", "name": "teacher", "type": "address" }], "internalType": "struct SimpleSIS.Course[]", "name": "", "type": "tuple[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getRole", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getStudentCourses", "outputs": [{ "components": [{ "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "address", "name": "teacher", "type": "address" }], "internalType": "struct SimpleSIS.Course[]", "name": "", "type": "tuple[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getStudentGrades", "outputs": [{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }, { "internalType": "string[]", "name": "", "type": "string[]" }, { "internalType": "uint256[][]", "name": "", "type": "uint256[][]" }], "stateMutability": "view", "type": "function" }]
+     const abi = [{ "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "_studentAddress", "type": "address" }, { "indexed": false, "internalType": "uint256", "name": "_id", "type": "uint256" }], "name": "AddedCourse", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": false, "internalType": "address", "name": "_student", "type": "address" }], "name": "AddedGrade", "type": "event" }, { "inputs": [{ "internalType": "string", "name": "_name", "type": "string" }, { "internalType": "address", "name": "_teacherAddress", "type": "address" }], "name": "addCourse", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "address", "name": "_student", "type": "address" }, { "internalType": "uint256", "name": "_grade", "type": "uint256" }], "name": "addGrade", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [{ "internalType": "uint256", "name": "_id", "type": "uint256" }, { "internalType": "address", "name": "_studentAddress", "type": "address" }], "name": "addStudentCourse", "outputs": [], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "name": "getCoursesByTeacher", "outputs": [{ "components": [{ "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "address", "name": "teacher", "type": "address" }], "internalType": "struct SimpleSIS.Course[]", "name": "", "type": "tuple[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getRole", "outputs": [{ "internalType": "string", "name": "", "type": "string" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getStudentCourses", "outputs": [{ "components": [{ "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "string", "name": "name", "type": "string" }, { "internalType": "address", "name": "teacher", "type": "address" }], "internalType": "struct SimpleSIS.Course[]", "name": "", "type": "tuple[]" }], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getStudentGrades", "outputs": [{ "internalType": "uint256[]", "name": "", "type": "uint256[]" }, { "internalType": "string[]", "name": "", "type": "string[]" }, { "internalType": "uint256[][]", "name": "", "type": "uint256[][]" }], "stateMutability": "view", "type": "function" }]
     const address = "0xC2dfea61b8C0f9423ea0a15261eDb2dD9Dd80EAC"
  
     $('#connect').click(async function () {
@@ -313,38 +313,28 @@
             window.web3 = new Web3(window.ethereum);
  
             const contract = new web3.eth.Contract(abi, address);
-            const role = await contract.methods.getRole().call({ from: addresses[0] });
+            //const role = await contract.methods.getRole().call({ from: addresses[0] });
+            const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"; //JA
+            const lowerCaseAdminAddress = adminAddress.toLowerCase();
  
-            console.log("role:" + role);
+            //*console.log("role:" + role);
             $('#connect').hide();
             $('#login-content').hide();
             $('#connectedAddress').css('display', 'block');
             $('#connectedAddress > span').html(addresses[0]);
 
-            // List of admin addresses
-            const adminAddresses = [
-            "0xf47bC986343F454742f242a3Fb4Fc5cA2E952B6F",
-            "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"
-        ];
+            if (addresses[0]  === lowerCaseAdminAddress) {
+                $('##student-area').show();
+                //getCoursesByTeacher()
+ 
 
-        // Check if the current address is an admin address
-        if (adminAddresses.includes(addresses[0])) {
-
-            $('#admin-area').show();
-            // Call admin-specific function if needed
-            // adminFunction();
-        } else {
-            // Open user part
-            if (role === "student") {
-                $('#student-area').show();
-                getStudentCourses();
             } else {
-                $('#professor-area').show();
-                getCoursesByTeacher();
+                $('#student-area').show();
+                //getStudentCourses();
             }
         }
-    }
-});
+ 
+    })
  
 
  
