@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.19;
 
-//NAPOMENA: Razdvojiti  komentare po postu (valjda smo to uradile)
-//NAPOMENA: //MOZDA MOZE OVAKO KAKO SAM KRENULA za positions
-
 contract NewsPortal {
 
     struct Post {
@@ -11,7 +8,6 @@ contract NewsPortal {
         string genre;
         string title;
         string content;
-        //Comment[] comments;  //this could not be used because Solidity does not support convesrion between memory and storage data types
         uint commentsPerPostID;
     }
 
@@ -21,45 +17,32 @@ contract NewsPortal {
         address userWriter;
         string content;
         uint numberOfCharacters; //this is the length of the comment
-        uint numberOfLikes;
-        uint numberOfDislikes;
+
     }
 
     address private writer; //this is the one and only admin
     address private usersAddress; //used to save users address from mapping, into a variable, so that user can be also deleted from users array
 
-    uint private id = 0; //ID, that will be used to count number of posts and increment for each new post, we started with 1, because that is more natural
+    uint private id = 1; //ID, that will be used to count number of posts and increment for each new post, we started with 1, because that is more natural
     uint private commentsPerPostID = 0; //number of comments per post
     uint private userID = 1; //counter to count the number of users, we started with 1, because that is more natural
 
     mapping(uint => Post) allPosts; // used to store all posts, key: postID, value: Post struct
     mapping(string => Post[]) postPerGenre; //used to store posts per genre, key:genre, value:arrays of post structs
-    mapping(address => string) positions; //so that we know what menu to open //MOZDA MOZE OVAKO KAKO SAM KRENULA
-    mapping(uint => address) allUsers; //so that admin can manage all users, key: counter (no. of logged in user), value: user's address
     mapping(uint => Comment[]) commentsPerPost; //key:post ID, value:array of comment structs
     mapping(uint => uint) commentsCountPerPost;
-    mapping(string => mapping(uint => uint)) commentsCountPerPostPerGenre; // Updated mapping to include the comment count in each post per genre
     mapping(uint => mapping(address => bool)) commentWritersPerPostIDMapping;  //key: post ID, value: another mapping(user's address => T/F), depending if they commented or not
-    mapping(address => uint256) public userIDMapping; 
 
     Post[] posts;  //list of all posts 
     Comment[] comments; //list of all comments 
 
-    address[] users; //list of all users to view because mapping allUsers is not iterable
-    address[] commentWritersPerPostArray; //? ne znam za sta je ovo
+    //address[] commentWritersPerPostArray; 
 
     event newPostCreatedEvent(uint id, string genre, string title, string content);
-    event postTitleUpdatedEvent(uint id, string newTitle);
-    event postContentUpdatedEvent(uint id, string newContent);
-    event postGenreUpdatedEvent(uint id, string newGenre);
-    event likeCommentAddedEvent(uint postID, uint commentID, uint numberOfLikes);
-    event dislikeCommentAddedEvent(uint postID, uint commentID, uint numberOfDislikes);
     event commentWrittenEvent(uint postID, uint commentID);
-    event userAddedEvent(address indexed userAddress, string position);
-    event userDeletedEvent(address indexed userAddress);
-
-
-    //modifiers to increment and decrement number of posts and users, and to increment number of comments
+    event PostDeletedEvent(uint id);
+    
+    //modifiers to increment and decrement number of posts, and to increment number of comments
 
     modifier incrementPostCounter(){  
         _;
@@ -71,16 +54,7 @@ contract NewsPortal {
         id -= 1;
     }
 
-    modifier incrementUserCount(){
-        _;
-        userID += 1;
-    }
-
-    modifier decrementUserCount(){
-        _;
-        userID -= 1;
-    }
-
+    
     modifier incrementCommentCounter(){
         _;
         commentsPerPostID += 1;
@@ -112,41 +86,14 @@ contract NewsPortal {
         _;
     }
 
-    //modifier to see if the user already logged in one, 
-    //if it did, don't memorize its data multiple times
-
-   /* modifier userNotExists(address _addr) {
-        require(bytes(positions[_addr]).length == 0, "User already exists in positions mapping");
-        require(allUsers[userID] != _addr, "User already exists in allUsers mapping");
-        require(!userExistsInArray(_addr), "User already exists in users array");
-        _;
-    }*/
-
-    function userExistsInArray(address _addr) internal view returns (bool) {
-        for (uint i = 0; i < users.length; i++) {
-            if (users[i] == _addr) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     constructor(){
         writer = msg.sender; //this is the one and only admin
-        positions[msg.sender] = "Administrator";
     }
 
     //function to write posts by an admin
     function writePosts(string memory _genre, string memory _title, string memory _content) external incrementPostCounter onlyAdmin {
 
-        // First comment is written by the owner
-        /*string memory firstComment = "Thank you for reading my post. Feel free to leave a comment.";  //--> da li nam ovo uopce sad treba
-        Comment memory writerComment = Comment( commentsPerPostID, id,  msg.sender, firstComment, 74, 0, 0);
-        comments.push(writerComment);
-
-        //each post struct will have a count of its comments
-        uint numberOfCommentsPerPost = comments.length;*/
-
+        
         // Create a new Post 
         Post memory newPost = Post(id, _genre, _title, _content, 0);
         posts.push(newPost);
@@ -185,6 +132,8 @@ contract NewsPortal {
 
         // also delete the post from other mapping as well
         delete allPosts[_id];
+        emit PostDeletedEvent(_id);
+
         
     }
 
@@ -199,89 +148,14 @@ contract NewsPortal {
         return postsArray.length; 
     }
 
-    
-    function getRole() external view returns (string memory) {
-       return positions[msg.sender];
-   }
-
-
-    //Functions to update post, by one of the three main features and emit an event for that
-    function updateTitle(uint _id, string memory _newTitle) external onlyAdmin{
-        allPosts[_id].title = _newTitle;
-        uint allPostsIndexToUpdate = findPostIndex(posts, _id);
-
-        // If the post is found in the array, update its title
-        if (allPostsIndexToUpdate < posts.length) {
-            posts[allPostsIndexToUpdate].title = _newTitle;
-        }
-
-        // Find the index of the post in the array based on its genre
-        string memory extractGenre = allPosts[_id].genre;
-        uint genreIndexToUpdate = findPostIndex(postPerGenre[extractGenre], _id);
-
-        // If the post is found in the genre array, update its title
-        if (genreIndexToUpdate < postPerGenre[extractGenre].length) {
-            postPerGenre[extractGenre][genreIndexToUpdate].title = _newTitle;
-        }
-
-        emit postTitleUpdatedEvent(_id, _newTitle);
-    }
-
-    // Function to update post content, it follows the same procedure as the function to update title
-    function updateContent(uint _id, string memory _newContent) external onlyAdmin {
-        allPosts[_id].content = _newContent;
-
-        uint allPostsIndexToUpdate = findPostIndex(posts, _id);
-
-        // If the post is found in the array, update its content
-        if (allPostsIndexToUpdate < posts.length) {
-            posts[allPostsIndexToUpdate].content = _newContent;
-        }
-
-        // Find the index of the post in the array based on its genre
-        string memory extractGenre = allPosts[_id].genre;
-        uint genreIndexToUpdate = findPostIndex(postPerGenre[extractGenre], _id);
-
-        // If the post is found in the genre array, update its content
-        if (genreIndexToUpdate < postPerGenre[extractGenre].length) {
-            postPerGenre[extractGenre][genreIndexToUpdate].content = _newContent;
-        }
-
-        emit postContentUpdatedEvent(_id, _newContent);
-    }
-
-    //Function to update post genre, it follows the same procedure as the function to update title and content
-    function updateGenre(uint _id, string memory _newGenre) external onlyAdmin {
-        allPosts[_id].genre = _newGenre;
-
-        uint allPostsIndexToUpdate = findPostIndex(posts, _id);
-
-        // If the post is found in the array, update its content
-        if (allPostsIndexToUpdate < posts.length) {
-            posts[allPostsIndexToUpdate].genre = _newGenre;
-        }
-
-        // Find the index of the post in the array based on its genre
-        string memory extractGenre = allPosts[_id].genre;
-
-        uint genreIndexToUpdate = findPostIndex(postPerGenre[extractGenre], _id);
-
-        // If the post is found in the genre array, update its genre
-        if (genreIndexToUpdate < postPerGenre[extractGenre].length) {
-            postPerGenre[extractGenre][genreIndexToUpdate].genre = _newGenre;
-        }
-
-        emit postGenreUpdatedEvent(_id, _newGenre);
-    }
-
     //function to get current number of posts
     function getCurrentPostCount() external view returns (uint) {
         return id;
     }
 
-       function writeComments(uint _postID, string memory _content) external onlyUser incrementCommentCounter checkCommentLength(_content) spamControl(_postID) returns (uint, address, string memory, uint, uint, uint) {
+    function writeComments(uint _postID, string memory _content) external onlyUser incrementCommentCounter checkCommentLength(_content) spamControl(_postID) returns (uint, address, string memory, uint) {
         uint _numberOfCharacters = bytes(_content).length;
-        Comment memory newComment = Comment(commentsPerPostID, _postID,  msg.sender, _content, _numberOfCharacters, 0, 0);
+        Comment memory newComment = Comment(commentsPerPostID, _postID,  msg.sender, _content, _numberOfCharacters);
         comments.push(newComment);
     
         // Update the mapping commentsPerPost
@@ -308,8 +182,9 @@ contract NewsPortal {
 
         emit commentWrittenEvent(_postID, newComment.id);
 
-        return (newComment.id, newComment.userWriter, newComment.content, newComment.numberOfCharacters, newComment.numberOfLikes, newComment.numberOfDislikes);
+        return (newComment.id, newComment.userWriter, newComment.content, newComment.numberOfCharacters);
     }
+
 
     function updatePostCommentCount(Post[] storage postsArray, uint _postID, uint count) internal {
         uint postIndexToUpdate = findPostIndex(postsArray, _postID);
@@ -323,109 +198,16 @@ contract NewsPortal {
         return allPosts[_postID].commentsPerPostID;
     }
 
-    // function to like a comment
-    function likeComment(uint _postID, uint _commentID) external onlyUser returns (uint) {
-        // we need to ensure that the comment actually exists
-        require(_commentID < comments.length, "Invalid comment ID");
-        comments[_commentID].numberOfLikes += 1;
-
-        // also, update the feature of comments in the mapping commentsPerPost
-        uint postId = comments[_commentID].postID;
-        commentsPerPost[postId][_commentID].numberOfLikes += 1;
-
-        emit likeCommentAddedEvent(_postID, _commentID, comments[_commentID].numberOfLikes);
-    
-        return comments[_commentID].numberOfLikes;
-    }   
-
-    // function to dislike a comment
-    function dislikeComment(uint _postID, uint _commentID) external onlyUser returns (uint) {
-        require(_commentID < comments.length, "Invalid comment ID");
-        comments[_commentID].numberOfLikes += 1;
-
-        uint postId = comments[_commentID].postID;
-        commentsPerPost[postId][_commentID].numberOfDislikes += 1;
-
-        emit likeCommentAddedEvent(_postID, _commentID, comments[_commentID].numberOfDislikes);
-    
-        return comments[_commentID].numberOfLikes;
-    }   
-
-    // function to add a user, so we know their address but also for admin to see a list of them
-    //user has to be added to all places from where it will be called
-    function addAUser(address _addr) external incrementUserCount /*userNotExists(_addr)*/ {
-        if (userIDMapping[_addr] == 0) {
-            //uint256 newUserID = userCount + 1;
-            userIDMapping[_addr] = userID;
-            allUsers[userID] = _addr;
-            users.push(_addr);
-            positions[_addr] = "User";
-            //userCount++;
-
-            emit userAddedEvent(_addr, "User");
-        }
-    }
-    
-
-   
-
-    //Deleting users based on address because that is unique
-    function deleteUser(address _userAddress) external onlyAdmin decrementUserCount {
-        // Find the index of the user in the array
-        uint indexToDelete = findUserIndex(users, _userAddress);
-
-        // If the user is found in the array, remove it
-        if (indexToDelete < users.length) {
-            // Swap the user to delete with the last user in the array
-            users[indexToDelete] = users[users.length - 1];
-            // Remove the last element from the array
-            users.pop();
-        emit userDeletedEvent(_userAddress);
-        }
-
-        //delete user from userID mapping
-        delete userIDMapping[_userAddress];
-        // Remove the user from the mapping
-        delete positions[_userAddress];
-        // also delete it from the mapping
-        delete allUsers[userID];
-}
-
-    // Function to find the index of a user in an array
-    function findUserIndex(address[] storage usersArray, address userAddress) internal view returns (uint) {
-        for (uint i = 0; i < usersArray.length; i++) {
-            if (usersArray[i] == userAddress) {
-                return i;
-            }
-        }
-        return usersArray.length; // Return array length if not found
-    }
-
-    //functions to getAll to be called after refreshing, getAll is needed after every event
-
     //function to view all posts (both by admin and users --> joint function)
-    //to be called after updating title and/or content, we will see
     //needed for the event newPostCreatedEvent
     function getAllPosts() external view returns(Post[] memory){
         return posts;
     }
 
-    /*I think that for these three events:
-    1.postTitleUpdatedEvent
-    2.postContentUpdatedEvent
-    3.postGenreUpdatedEvent
-    we can use both function getAllPosts, and getAllPostsByGenre, but we will see based on frontend implementation*/
-
     //function to view all posts based on genre
     //this one will be called after updating genre, but also can be called after updating title and/or content, we will see
     function getAllPostsPerGenre(string memory _wantedGenre) external view returns(Post[] memory){
         return postPerGenre[_wantedGenre];
-    }
-
-    //View all users
-    //needed for these two events, userAddedEvent and userDeletedEvent
-    function getAllUsers() external view onlyAdmin returns (address[] memory) {
-        return users; //for this, we needed to have that array users[]
     }
 
     //function to get all comments per post
@@ -434,17 +216,11 @@ contract NewsPortal {
         return commentsPerPost[_postID];
     }
 
-    // I guesss that these two events can be put together for each comment,  likeCommentAddedEvent and dislikeCommentAddedEvent
-    function getNumberOfLikesAndDislikesPerComment(uint _postID, uint _commentID) external view returns (uint, uint) {
-        require(_postID < posts.length, "Invalid post ID"); //postID has to be less than or equal because we put by default that the post ID starts from one
-        require(_commentID < commentsPerPost[_postID].length, "Invalid comment ID");
-
-        Comment memory comment = commentsPerPost[_postID][_commentID];
-        return (comment.numberOfLikes, comment.numberOfDislikes);
-    }
+   
     
 
 }
+
 
 
     

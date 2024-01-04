@@ -15,7 +15,7 @@
     <title>Document</title>
 </head>
 <body>
-    <p>Please log in using your MetaMask wallet.</p>
+    <p id="pleaseLogIn">Please log in using your MetaMask wallet.</p>
     <button id="connect">Connect to MetaMask</button>
     <p id="connectedAddress" style="display: none;">Connected address: <span></span></p>
 
@@ -24,8 +24,12 @@
         <!-- Add your admin content here -->
         <p>Welcome Admin!</p>
 
+
         <!-- Write Posts Button for Admin -->
     <button id="writePostBtn" style="display: none;">Write A Post</button>
+    
+
+    <div id="postsList"></div>
 
     <!-- Write Posts Form for Admin -->
     <div id="writePosts" style="display: none;">
@@ -68,7 +72,7 @@
     
 
     <script>
-        const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"}],"name":"commentWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"numberOfDislikes","type":"uint256"}],"name":"dislikeCommentAddedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"numberOfLikes","type":"uint256"}],"name":"likeCommentAddedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"newContent","type":"string"}],"name":"postContentUpdatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"newGenre","type":"string"}],"name":"postGenreUpdatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"newTitle","type":"string"}],"name":"postTitleUpdatedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"userAddress","type":"address"},{"indexed":false,"internalType":"string","name":"position","type":"string"}],"name":"userAddedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"userAddress","type":"address"}],"name":"userDeletedEvent","type":"event"},{"inputs":[{"internalType":"address","name":"_addr","type":"address"}],"name":"addAUser","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"_userAddress","type":"address"}],"name":"deleteUser","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"uint256","name":"_commentID","type":"uint256"}],"name":"dislikeComment","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getAllUsers","outputs":[{"internalType":"address[]","name":"","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentCountPerPost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentsPerPost","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"postID","type":"uint256"},{"internalType":"address","name":"userWriter","type":"address"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"numberOfCharacters","type":"uint256"},{"internalType":"uint256","name":"numberOfLikes","type":"uint256"},{"internalType":"uint256","name":"numberOfDislikes","type":"uint256"}],"internalType":"struct NewsPortal.Comment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"uint256","name":"_commentID","type":"uint256"}],"name":"getNumberOfLikesAndDislikesPerComment","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getRole","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"uint256","name":"_commentID","type":"uint256"}],"name":"likeComment","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"string","name":"_newContent","type":"string"}],"name":"updateContent","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"string","name":"_newGenre","type":"string"}],"name":"updateGenre","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"},{"internalType":"string","name":"_newTitle","type":"string"}],"name":"updateTitle","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"userIDMapping","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeComments","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}]
+        const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"}],"name":"PostDeletedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"}],"name":"commentWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentCountPerPost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentsPerPost","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"postID","type":"uint256"},{"internalType":"address","name":"userWriter","type":"address"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"numberOfCharacters","type":"uint256"}],"internalType":"struct NewsPortal.Comment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeComments","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}];
 
 
 
@@ -76,8 +80,9 @@ $('#connect').click(async function () {
     if (window.ethereum) {
         let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
         window.web3 = new Web3(window.ethereum);
+        deployed_contract = '0x4f47a5c308fa0A0531Be581487b2f192EdFefcbD';
         
-        const contract = new web3.eth.Contract(abi, "0x1CB3C40e64A652289C02d610D3E2227b037756cf");
+        const contract = new web3.eth.Contract(abi, deployed_contract);
         const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"; // JA
         const lowerCaseAdminAddress = adminAddress.toLowerCase();
 
@@ -85,6 +90,7 @@ $('#connect').click(async function () {
         const lowerCaseAdminAddress2 = adminAddress2.toLowerCase();
 
         $('#connect').hide();
+        $('#pleaseLogIn').hide();
         $('#login-content').hide();
         $('#connectedAddress').css('display', 'block');
         $('#connectedAddress > span').html(addresses[0]);
@@ -92,11 +98,14 @@ $('#connect').click(async function () {
         if (addresses[0] === lowerCaseAdminAddress || addresses[0] === lowerCaseAdminAddress2) {
             $('#adminDiv').show();
             // Show "Write A Post" button only for admins
+
             $('#writePostBtn').show();
+            getAllPosts();
 
             $('#writePostBtn').click(function () {
                 // Show the create post form for admins
                 $('#writePosts').show();
+                $('#postsList').hide();
             });
 
             // Handle submit post button click
@@ -111,7 +120,10 @@ $('#connect').click(async function () {
                         contract.events.newPostCreatedEvent()
                             .on('data', function (event) {
                                 console.log(event);
-                                getAllPosts(); //OVO BAS NE RADI
+                                $('#writePosts').hide();
+                                $('#postsList').show();
+                                getAllPosts();
+                                
                             });
                     });
                 } catch (error) {
@@ -120,37 +132,36 @@ $('#connect').click(async function () {
             });
 
             $('#cancelPost').click(function () {
+                //event.stopPropagation();
+                event.preventDefault();
                 
                 //OVDJE NESTO NIJE DOBRO JER ME SKROZ IZBACI, TJ. LOGGS OUT, A TREBA SAMO SAKRITI OVAJ PROMPT
                 $('#writePosts').hide();
+                $('#postsList').show();
+                getAllPosts();
             });
 
 
         async function getAllPosts() {
-        let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const contract = new web3.eth.Contract(abi, address);
-        let posts = await contract.methods.getAllPosts().call({ from: addresses[0] });
+            let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+            const contract = new web3.eth.Contract(abi, deployed_contract);
+            let posts = await contract.methods.getAllPosts().call({ from: addresses[0] });
+            console.log(posts);
  
-        let content = '';
+            let content = '';
  
-        for (let i = 0; i < posts.length; i++) {
- 
-            content += `
-                <p>
-                    <b>Post ID: ${posts[i].id}</b>
-                    <b>
-                    Post Title: ${posts[i].title}
-                    <b>
-                    Post Genre: ${posts[i].genre}
-                    <b>
-                </p>
-            `
-        }
-        
- 
- 
- 
+            for (let i = 0; i < posts.length; i++) {
+                content += `
+            <p>
+                <b>Post ID: ${posts[i].id}</b><br>
+                Post Title: ${posts[i].title}<br>
+                Post Genre: ${posts[i].genre}<br>
+            </p>
+        `;
     }
+
+    $('#postsList').html(content);  // Update the content of the postsList div
+}
 
             
 
