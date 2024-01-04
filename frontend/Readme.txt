@@ -1,6 +1,6 @@
 Thanks for downloading this template!
 
-Template Name: ZenBlog
-Template URL: https://bootstrapmade.com/zenblog-bootstrap-blog-template/
+Template Name: Amoeba
+Template URL: https://bootstrapmade.com/free-one-page-bootstrap-template-amoeba/
 Author: BootstrapMade.com
-License: https:///bootstrapmade.com/license/
+License: https://bootstrapmade.com/license/
