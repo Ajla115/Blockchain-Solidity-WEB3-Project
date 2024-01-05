@@ -369,6 +369,8 @@ if (window.ethereum) {
         console.log("New post created: ", event);
         $('#writePosts').hide();
         $('#postsList').show();
+        $('#writePostBtn').show();
+        $('#deletePostBtn').show();
         getAllPosts();
         });
     
@@ -451,6 +453,8 @@ if (window.ethereum) {
         //$('#deletePosts').hide();
             $('#postsList').show();
             getAllPosts();
+            $('#writePostBtn').show();
+            $('#deletePostBtn').show();
             });
 
     async function deletePost(postId) {
