@@ -20,10 +20,13 @@ contract NewsPortal {
 
     }
 
-    address private writer; //this is the one and only admin
+    //address private writer; //this is the one and only admin
+    mapping(address => bool) private admins; //we have two admins
+
     address private usersAddress; //used to save users address from mapping, into a variable, so that user can be also deleted from users array
 
     uint private id = 1; //ID, that will be used to count number of posts and increment for each new post, we started with 1, because that is more natural
+    uint private postCounter = 0; //this counts the number of posts
     uint private commentsPerPostID = 0; //number of comments per post
     uint private userID = 1; //counter to count the number of users, we started with 1, because that is more natural
 
@@ -46,12 +49,19 @@ contract NewsPortal {
 
     modifier incrementPostCounter(){  
         _;
+        postCounter += 1;
+    }
+
+    modifier incrementPostID(){
+        _;
         id += 1;
     }
 
+
+
     modifier decrementPostCounter(){
         _;
-        id -= 1;
+        postCounter -= 1;
     }
 
     
@@ -62,15 +72,17 @@ contract NewsPortal {
 
     //access control modifiers, some actions are allowed only to admin, and some are prohibited to admin
 
-    modifier onlyAdmin(){
-        require(msg.sender == writer, "You need to be an admin to perform this action.");
+
+
+    modifier onlyUser(){
+        require( admins[msg.sender] == false, "You have to be logged in as a user for this.");
         _;
     }
 
-    modifier onlyUser(){
-        require(msg.sender != writer, "You have to be logged in as a user for this.");
-        _;
-    }
+    modifier onlyAdmin() {
+    require(admins[msg.sender], "Only an admin can perform this action.");
+    _;
+}
 
     //modifier to check comment character limit
 
@@ -86,12 +98,12 @@ contract NewsPortal {
         _;
     }
 
-    constructor(){
-        writer = msg.sender; //this is the one and only admin
-    }
+    constructor() {
+    admins[msg.sender] = true; // Set the contract deployer as an admin
+}
 
     //function to write posts by an admin
-    function writePosts(string memory _genre, string memory _title, string memory _content) external incrementPostCounter onlyAdmin {
+    function writePosts(string memory _genre, string memory _title, string memory _content) external incrementPostCounter incrementPostID onlyAdmin {
 
         
         // Create a new Post 
@@ -150,7 +162,7 @@ contract NewsPortal {
 
     //function to get current number of posts
     function getCurrentPostCount() external view returns (uint) {
-        return id;
+        return postCounter;
     }
 
     function writeComments(uint _postID, string memory _content) external onlyUser incrementCommentCounter checkCommentLength(_content) spamControl(_postID) returns (uint, address, string memory, uint) {
