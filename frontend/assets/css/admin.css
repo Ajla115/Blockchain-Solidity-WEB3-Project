@@ -1,0 +1,157 @@
+#adminDiv {
+    display: none;
+    padding: 20px;
+    background-color: #f2f9f8;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  #adminDiv p {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  #adminDiv button {
+    margin-top: 10px;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #70b9b0;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  #adminDiv button:hover {
+    background-color: #60a89f;
+  }
+  
+  #postsList {
+    margin-top: 20px;
+  }
+  
+  #postsList h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  #postsList table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  #postsList th,
+  #postsList td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  #postsList th {
+    background-color: #70b9b0;
+    color: #fff;
+  }
+  
+  #writePosts {
+    margin-top: 20px;
+  }
+  
+  #writePosts h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  #writePosts form {
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  #writePosts .form-group {
+    margin-bottom: 20px;
+  }
+  
+  #writePosts label {
+    font-weight: bold;
+  }
+  
+  #writePosts input[type="text"],
+  #writePosts textarea {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  #writePosts button[type="button"],
+  #writePosts button[type="submit"],
+  #deletePostModal button[type="button"] {
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #70b9b0;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  #writePosts button[type="button"]:hover,
+  #writePosts button[type="submit"]:hover,
+  #deletePostModal button[type="button"]:hover {
+    background-color: #60a89f;
+  }
+  
+  #deletePostModal {
+    display: none;
+    padding: 20px;
+    background-color: #f2f9f8;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  #deletePostModal h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  #deletePostModal form {
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  #deletePostModal .form-group {
+    margin-bottom: 20px;
+  }
+  
+  #deletePostModal label {
+    font-weight: bold;
+  }
+  
+  #deletePostModal input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  #deletePostModal button[type="button"],
+  #deletePostModal button[type="submit"] {
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 5px;
+    border: none;
+    background-color: #70b9b0;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  #deletePostModal button[type="button"]:hover,
+  #deletePostModal button[type="submit"]:hover {
+    background-color: #60a89f;
+  }
+  

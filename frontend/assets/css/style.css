@@ -5,6 +5,104 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+
+/*login*/
+/* Centered and Smaller LoginDiv styles */
+/* Centered LoginDiv styles */
+#LoginDiv {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #f2f2f2;
+  padding: 60px; /* Increased padding for a larger box */
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px; /* Limit the width */
+  font-family: "Open Sans", sans-serif; /* Change the font family */
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+}
+
+#LoginDiv #pleaseLogIn {
+  font-size: 17px; /* Keep the font size */
+  margin-bottom: 20px;
+  font-weight: bold; /* Keep the text bold */
+  color: #505050; /* Change the color to a darker shade */
+}
+
+#LoginDiv #connect {
+  padding: 10px 20px; /* Adjusted padding for button size */
+  border: none;
+  border-radius: 5px;
+  background-color: #70b9b0;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px; /* Keep the font size */
+  text-transform: uppercase; /* Convert text to uppercase */
+  letter-spacing: 1px; /* Add letter spacing for better readability */
+}
+
+#LoginDiv #connect:hover {
+  background-color: #609c96; /* Darken the color on hover */
+}
+
+
+/*end login div*/
+
+/* Add this to your existing style.css file */
+#adminDiv {
+  text-align: center; /* Center the content horizontally */
+  padding: 30px; /* Add some padding around the content */
+}
+
+#adminDiv p {
+  margin-bottom: 20px; /* Add some space below the paragraphs */
+  font-family: "Open Sans", sans-serif; /* Change the font family */
+  font-size: 18px; /* Increase the font size */
+  font-weight: bold; /* Make the text bold */
+}
+
+#adminDiv button {
+  margin-top: 10px; /* Add some space above the buttons */
+  margin-bottom: 10px; /* Add some space below the buttons */
+  padding: 10px 20px; /* Add padding to the buttons */
+  font-family: "Open Sans", sans-serif; /* Change the font family */
+  font-size: 16px; /* Set the font size */
+  background-color: #70b9b0; /* Set the background color */
+  color: white; /* Set the text color */
+  border: none; /* Remove the border */
+  border-radius: 5px; /* Add some rounded corners */
+  cursor: pointer; /* Add a pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Add a smooth transition */
+}
+
+#adminDiv button:hover {
+  background-color: #70b9b0; /* Darken the background color on hover */
+}
+
+#postsList {
+  margin-top: 20px; /* Add some space above the table */
+}
+
+.table {
+  width: 100%; /* Make the table fill the width of the container */
+  border-collapse: collapse; /* Collapse the borders between table cells */
+  margin-top: 20px; /* Add some space above the table */
+}
+
+.table th, .table td {
+  padding: 12px; /* Add padding to table cells */
+  text-align: left; /* Align text to the left in table cells */
+  border-bottom: 1px solid #ddd; /* Add a bottom border to table rows */
+  font-family: "Open Sans", sans-serif; /* Change the font family */
+}
+
+.table th {
+  background-color: #f2f2f2; /* Set a background color for table headers */
+  font-weight: bold; /* Make the headers bold */
+}
+/*end admin*/
 /*NEW ADDED*/
 
 .button-container {
