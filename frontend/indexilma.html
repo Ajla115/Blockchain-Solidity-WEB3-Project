@@ -190,6 +190,9 @@
         <!-- Add your admin content here -->
         <p>WELCOME ADMIN!</p>
 
+         <!-- Post Count Display NOVO -->
+        <p id="postCountDisplay">Number of posts: <span id="postCount">0</span></p>
+
 
             <!-- Write Posts Button for Admin id="writePostBtn"-->
         <button id="writePostBtn" style="display: none;">Write A Post</button>
@@ -319,7 +322,7 @@
 
 <script>
     const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"}],"name":"PostDeletedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"}],"name":"commentWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentCountPerPost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentsPerPost","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"postID","type":"uint256"},{"internalType":"address","name":"userWriter","type":"address"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"numberOfCharacters","type":"uint256"}],"internalType":"struct NewsPortal.Comment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeComments","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}];
-
+        //NOVI ABI
 
 $(document).ready(function () {
     $('#header, #footer, #HeroDiv, #LifestyleDiv, #TechDiv, #BusinessDiv, #adminDiv, #NewsDiv').hide();
@@ -329,7 +332,7 @@ $('#connect').click(async function () {
 if (window.ethereum) {   
     let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
     window.web3 = new Web3(window.ethereum);
-    deployed_contract = '0x4f47a5c308fa0A0531Be581487b2f192EdFefcbD';
+    deployed_contract = '0xD7DAC2218f46074cdB57F14f8fcbE1F5a501145F'; //NOVO
     
     const contract = new web3.eth.Contract(abi, deployed_contract);
     const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"; // JA
@@ -341,9 +344,9 @@ if (window.ethereum) {
     $('#connect').hide();
     $('#pleaseLogIn').hide();
     $('#login-content').hide();
-    $('#connectedAddress').css('display', 'block');
+    $('#connectedAddress').css('display', 'block');*/
     $('#connectedAddress > span').html(addresses[0]);
-    */
+    
     $('#connect').hide();
     $('#LoginDiv').hide();
     $('#header, #footer, #HeroDiv').show();
@@ -352,7 +355,8 @@ if (window.ethereum) {
     if (addresses[0] === lowerCaseAdminAddress || addresses[0] === lowerCaseAdminAddress2) {
         //$('#HeroDiv').show();
         // Show "Write A Post" button only for admins
-
+        $('#postCountDisplay').show(); //NOVO
+        $('postCount').show(); //NOVO
         $('#writePostBtn').show();
         $('#deletePostBtn').show();
         getAllPosts();
@@ -372,6 +376,7 @@ if (window.ethereum) {
         $('#writePostBtn').show();
         $('#deletePostBtn').show();
         getAllPosts();
+        updatePostCount(); //NOVO
         });
     
 
@@ -394,7 +399,9 @@ if (window.ethereum) {
     $('#cancelPost').click(function () {
         //event.stopPropagation();
         event.preventDefault(); //zasad radi sa ovim
-        
+        $('#title').val(''); //NOVO
+        $('#genre').val(''); //NOVO
+        $('#content').val(''); //NOVO
         $('#writePosts').hide();
         $('#postsList').show();
         $('#writePostBtn').show();
@@ -424,26 +431,26 @@ if (window.ethereum) {
     }
 
     $('#deletePostBtn').click(function () {
-    // Show the delete post modal
-    $('#deletePostModal').show();
-    $('#postsList').hide();
-    $('#deletePostBtn').hide();
+      // Show the delete post modal
+      $('#deletePostModal').show();
+      $('#postsList').hide();
+      $('#deletePostBtn').hide();
     });
 
     $('#confirmDelete').click(function () {
-    let postIdToDelete = $('#deletePostID').val();
-    if (postIdToDelete) {
-        deletePost(postIdToDelete);
-        $('#deletePostModal').hide(); // Hide the modal after deletion
-    }
+      let postIdToDelete = $('#deletePostID').val();
+      if (postIdToDelete) {
+          deletePost(postIdToDelete);
+          $('#deletePostModal').hide(); // Hide the modal after deletion
+      }
     });
 
     $('#cancelDelete').click(function () {
-    // Hide the modal and clear the input field
-    $('#deletePostID').val('');
-    $('#deletePostModal').hide();
-    $('#postsList').show();
-    $('#deletePostBtn').show();
+        // Hide the modal and clear the input field
+        $('#deletePostID').val('');
+        $('#deletePostModal').hide();
+        $('#postsList').show();
+        $('#deletePostBtn').show();
     });
 
 
@@ -453,6 +460,7 @@ if (window.ethereum) {
         //$('#deletePosts').hide();
             $('#postsList').show();
             getAllPosts();
+            updatePostCount();  //NOVO
             $('#writePostBtn').show();
             $('#deletePostBtn').show();
             });
@@ -469,8 +477,16 @@ if (window.ethereum) {
         alert('Failed to delete post.');
     }
     }
+    async function updatePostCount() {
+    try {
+        let postCount = await contract.methods.getCurrentPostCount().call({ from: addresses[0] });
+        $('#postCount').text(postCount);
+    } catch (error) {
+        console.error("Error fetching post count:", error);
+    }
+}
 
-    } 
+  } 
 }
 });
 });
