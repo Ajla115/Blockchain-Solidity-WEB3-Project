@@ -142,7 +142,7 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="indexajla2.html">News Portal</a></h1>
+        <h1><a href="#hero">News Portal</a></h1>
       </div>
 
       <nav id="navbar" class="navbar">
@@ -150,8 +150,8 @@
           <li><a class="nav-link scrollto active" href="#hero" onclick="ChangeTab.goToHome();">News</a></li>
           <li><a class="nav-link scrollto" id= 'lifestyleButton' href="#lifestyle" onclick="ChangeTab.goToLifestyle();">Lifestyle</a></li>
           <li><a class="nav-link scrollto" id = 'techButton' href="#tech" onclick="ChangeTab.goToTech();">Tech</a></li>
-          <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">Admin Panel</a></li>
-          <li><a class="nav-link scrollto" href="#logout" onclick="UserService.logout()">Logout</a></li>
+          <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">Panel</a></li>
+          <li><a class="nav-link scrollto" href="indexajla2.html">Logout</a></li> <!--Kada se kod prebaci pri kliku na index onda je full logout ne treba js-->
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -190,6 +190,21 @@
         
           <div id="genrePostsContainer"></div> <!-- ======= NOVO 2======= -->
           <div id="detailedPost" style="display: none;"></div> <!-- ======= NOVO 2======= -->
+
+          <!-- KOMENTARI-->
+        <div id="commentFormModal" style="display: none;">
+          <form>
+              <div class="form-group">
+                  <label for="commentText">Your Comment</label>
+                  <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+              </div>
+              <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
+              <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
+          </form>
+      </div>
+
+      <!-- Comments Display Section -->
+      <div id="commentsDisplay"></div>
       
         </div>
       </section>
@@ -211,6 +226,21 @@
 
           <div id="genrePostsContainer2"></div> <!-- ======= NOVO 2======= -->
           <div id="detailedPost2" style="display: none;"></div> <!-- ======= NOVO 2======= -->
+
+           <!-- KOMENTARI-->
+        <div id="commentFormModal2" style="display: none;">
+          <form>
+              <div class="form-group">
+                  <label for="commentText">Your Comment</label>
+                  <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+              </div>
+              <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
+              <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
+          </form>
+      </div>
+
+      <!-- Comments Display Section -->
+      <div id="commentsDisplay"></div>
 
         </div>
       </section>
@@ -292,9 +322,12 @@
     <div id="userDiv" style="display: none;"> 
         <!-- Add your user content here -->
         <p>Welcome User!</p>
-        <div id="commentDisplay"></div>
-        
+        <!--<div id="commentDisplay"></div>-->
+       <!-- <section class="login-div">-->
+        <p id="connectedAddress" style="display: none;">This is your address: <span></span></p>
+        <!--</section>-->
         <!-- KOMENTARI-->
+        <!--
         <div id="commentFormModal" style="display: none;">
             <form>
                 <div class="form-group">
@@ -305,7 +338,7 @@
                 <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
             </form>
         </div>
-
+-->
         <!-- Comments Display Section -->
         <div id="commentsDisplay"></div>
   
@@ -368,14 +401,7 @@
 
   
   </script>
-<!--
-  <script>
-        $(document).ready(function () {
-            // Hide all sections except the login section
-            $('#header, #footer, #HeroDiv, #LifestyleDiv, #TechDiv, #BusinessDiv, #adminDiv, #NewsDiv').hide();
-            $('#LoginDiv').show(); // Show the login section by default
-        });
-  </script>-->
+
 
 <script>
 
@@ -401,6 +427,9 @@ if (window.ethereum) {
 
     const adminAddress2 = "0xBFfB885Ee9adeF105Ced97e74577606eF1a85284"; // ILMA
     const lowerCaseAdminAddress2 = adminAddress2.toLowerCase();
+
+    const userAddress = "0x75E573a1c77362FB81E739B1117007A3BE2423dF"; // ILMA - User
+    const lowerCaseUserAddress = userAddress.toLowerCase();
   /*
     $('#connect').hide();
     $('#pleaseLogIn').hide();
@@ -528,13 +557,13 @@ async function displayPostsByGenre2(genre) {
 
 
 
-$('#lifestyleButton').click(function() {
-    displayPostsByGenre('Lifestyle');
-});
+        $('#lifestyleButton').click(function() {
+            displayPostsByGenre('Lifestyle');
+        });
 
-$('#techButton').click(function() {
-    displayPostsByGenre2('Tech');
-});
+        $('#techButton').click(function() {
+            displayPostsByGenre2('Tech');
+        });
 
 
 
@@ -699,9 +728,9 @@ $('#confirmDelete').click(async function () {
 }
     
 
-  } 
+  } //END FOR ADMIN
 
-         else {
+         else{
             // For regular users, show user content
             //$('#adminDiv').hide();
             $('#admin').hide();
@@ -710,6 +739,8 @@ $('#confirmDelete').click(async function () {
             //$('$postLists').hide(); //NOVO 2
             $('#userDiv').show();
             $('#genrePostsContainer').show();
+            $('#connectedAddress').show();
+            $('#connectedAddress > span').html(addresses);
             
 
 
@@ -749,12 +780,18 @@ $('#detailedPost').html(`
     <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
     <button class="btn btn-primary back-btn">Back</button>
 `).show();
-
-// Event handler for the Write Comment button
-$('#writeCommentBtn').click(function() {
-    // Display the comment submission modal
-    $('#commentFormModal').show();
-});
+      //ilma dodala si BACK BUTTON
+      // Back button functionality
+      $('.back-btn').click(function() {
+                      $('#detailedPost').hide();
+                      $('#' + postId).show();
+                  });
+        // Event handler for the Write Comment button
+        $('#writeCommentBtn').click(function() {
+            // Display the comment submission modal
+            $('#commentFormModal').show();
+            
+        });
 
         });
     });
@@ -776,6 +813,7 @@ $(document).on('click', '.read-more-btn', function() {
         <div id="commentsDisplay"></div>
         <button class="btn btn-secondary back-btn">Back</button>
     `).show();
+    
 
     // Fetch and display comments for this post
     displayCommentsForPost(postId);
@@ -825,6 +863,15 @@ $('#confirmComment').click(async function() {
     $('#commentText').val('');
 });
 
+ //CANCEL COMMENT ILMA VIDIII
+ $('#cancelComment').click(function () {
+        // Hide the modal and clear the input field
+        //$('#deletePostID').val('');
+        $('#commentFormModal').hide();
+        //$('#postsList').show();
+        //$('#deletePostBtn').show();
+    });
+
 
              
 
@@ -860,11 +907,18 @@ $('#detailedPost2').html(`
     <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
     <button class="btn btn-primary back-btn">Back</button>
 `).show();
+ //ilma dodala si
+      // Back button functionality
+      $('.back-btn').click(function() {
+                      $('#detailedPost2').hide();
+                      $('#' + postId).show();
+                  });
 
 // Event handler for the Write Comment button
 $('#writeCommentBtn').click(function() {
     // Display the comment submission modal
-    $('#commentFormModal').show();
+    $('#commentFormModal2').show();
+
 });
 
         });
@@ -931,7 +985,7 @@ $('#confirmComment').click(async function() {
     }
 
     // Hide the modal after submitting the comment
-    $('#commentFormModal').hide();
+    $('#commentFormModal2').hide();
     // Clear the comment input field
     $('#commentText').val('');
 });
@@ -950,14 +1004,8 @@ $('#confirmComment').click(async function() {
     
     
     });
+    </script>
 
-
-
-
-
-</script>
-
-</body>
-
+  </body>
 
 </html>
