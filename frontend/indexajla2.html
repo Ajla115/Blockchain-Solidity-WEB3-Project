@@ -834,6 +834,7 @@ $('#techButton').click(function() {
 // Handle comment submission
 $('#confirmComment').click(async function() {
     let commentContent = $('#commentText').val();
+   
 
     if (commentContent.length > 250) {
         alert('Comment must be 250 characters or less.');
@@ -943,8 +944,19 @@ $(document).on('click', '.read-more-btn', function() {
     `).show();
 
     // Fetch and display comments for this post
-    displayCommentsForPost(postId);
+    displayCommentsForPost2(postId);
 });
+
+async function displayCommentsForPost2(postId) {
+    try {
+        let comments = await contract.methods.getCommentsPerPost(postId).call();
+        comments.forEach(comment => {
+            displayComment(comment.userWriter, comment.content);
+        });
+    } catch (error) {
+        console.error("Error fetching comments:", error);
+    }
+}
 
 
 
@@ -956,6 +968,7 @@ $('#lifestyleButton').click(function() {
 $('#techButton').click(function() {
     displayPostsByGenre2('Tech');
 });
+
 
 
 // Handle comment submission
@@ -978,8 +991,12 @@ $('#confirmComment2').click(async function() {
             .then(function(result) {
                 displayComment(addresses[0], commentContent);
                 $('#commentInput').val('');
+                console.log(currentPostId);
+      //console.log(commentContent);
             });
     } catch (error) {
+      //console.log(currentPostId);
+      //console.log(commentContent);
         console.error("Error submitting comment:", error);
         alert('Failed to submit comment. Error: ' + error.message);
     }
