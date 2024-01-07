@@ -263,11 +263,16 @@
         <p>Welcome User!</p>
         <div id="commentDisplay"></div>
         
-        <!-- Comment Submission Form -->
-<div id="commentFormDiv" style="display: none;">
-    <h3>Write a Comment</h3>
-    <textarea id="commentInput" placeholder="Enter your comment (max 250 characters)"></textarea>
-    <button id="submitComment">Submit Comment</button>
+<!-- KOMENTARI-->
+<div id="commentFormModal" style="display: none;">
+    <form>
+        <div class="form-group">
+            <label for="commentText">Your Comment</label>
+            <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
+        <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
+    </form>
 </div>
 
 <!-- Comments Display Section -->
@@ -350,6 +355,9 @@
   </script>-->
 
 <script>
+
+var currentPostId = null; // KOMENTARI
+
     const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"}],"name":"PostDeletedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"}],"name":"commentWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentCountPerPost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentsPerPost","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"postID","type":"uint256"},{"internalType":"address","name":"userWriter","type":"address"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"numberOfCharacters","type":"uint256"}],"internalType":"struct NewsPortal.Comment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeComments","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}];
         //Najnoviji ABI
 
@@ -616,72 +624,101 @@ $('#confirmDelete').click(async function () {
             $('postCount').hide(); //NOVO 2
             //$('$postLists').hide(); //NOVO 2
             $('#userDiv').show();
+            $('#genrePostsContainer').show();
 
 
     
 
 
-
-
-    // Function to display posts by genre
+//KOMENTARII
 async function displayPostsByGenre(genre) {
     let posts = await contract.methods.getAllPostsPerGenre(genre).call();
+    
     let postsContainer = $('#genrePostsContainer');
     postsContainer.empty();
 
-    posts.forEach(post => {
+    posts.forEach((post, index) => {
+        let postId = 'post_' + index;
         let postCard = `
-            <div class="card" data-post-id="${post.id}">
+            <div class="card" id="${postId}">
               <div class="card-header">${post.genre}</div>
               <div class="card-body">
                 <h5 class="card-title">${post.title}</h5>
-                <button class="btn btn-primary read-more-btn" data-post-id="${post.id}">Read More</button>
+                <button class="btn btn-primary read-more-btn">Read More</button>
               </div>
             </div>
         `;
+
         postsContainer.append(postCard);
-    });
 
-    // Event delegation for dynamic elements
-    $(document).on('click', '.read-more-btn', function() {
-        let postId = $(this).data('post-id');
-        let post = posts.find(p => p.id === postId);
+        $('#' + postId + ' .read-more-btn').click(function() {
+            // Hide the card
+            $('#' + postId).hide();
 
-        // Hide all cards and show detailed post content
-        $('.card').hide();
-        $('#detailedPost').html(`
-            <h3>${post.title}</h3>
-            <p>${post.content}</p>
-            <textarea id="commentInput" placeholder="Enter your comment"></textarea>
-            <button class="btn btn-primary" id="submitComment" data-post-id="${postId}">Submit Comment</button>
-            <div id="commentsDisplay"></div>
-            <button class="btn btn-secondary back-btn">Back</button>
-        `).show();
+            // Show the detailed post content
+           // Show the detailed post content and the write comment button
+$('#detailedPost').html(`
+    <h3>${post.title}</h3>
+    <p>${post.content}</p>
+    <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
+    <button class="btn btn-primary back-btn">Back</button>
+`).show();
 
-        // Fetch and display comments for this post
-        displayCommentsForPost(postId);
-    });
+// Event handler for the Write Comment button
+$('#writeCommentBtn').click(function() {
+    // Display the comment submission modal
+    $('#commentFormModal').show();
+});
 
-    // Back button functionality
-    $(document).on('click', '.back-btn', function() {
-        $('#detailedPost').empty().hide();
-        $('.card').show();
+        });
     });
 }
 
-// Function to handle comment submission
-$(document).on('click', '#submitComment', async function() {
-    let commentContent = $('#commentInput').val();
+// Event delegation for dynamic elements
+$(document).on('click', '.read-more-btn', function() {
     let postId = $(this).data('post-id');
+    currentPostId = postId; // Store the current post ID
+
+    let post = posts.find(p => p.id === postId);
+
+    // Hide all cards and show detailed post content
+    $('.card').hide();
+    $('#detailedPost').html(`
+        <h3>${post.title}</h3>
+        <p>${post.content}</p>
+        <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
+        <div id="commentsDisplay"></div>
+        <button class="btn btn-secondary back-btn">Back</button>
+    `).show();
+
+    // Fetch and display comments for this post
+    displayCommentsForPost(postId);
+});
+
+
+
+// Initialize the display for a specific genre
+$('#lifestyleButton').click(function() {
+    displayPostsByGenre('Lifestyle');
+});
+
+// Handle comment submission
+$('#confirmComment').click(async function() {
+    let commentContent = $('#commentText').val();
 
     if (commentContent.length > 250) {
         alert('Comment must be 250 characters or less.');
         return;
     }
 
+    if (currentPostId === null) {
+        alert('No post selected for commenting.');
+        return;
+    }
+
     try {
         // Submit comment to the blockchain
-        await contract.methods.writeComments(postId, commentContent).send({ from: addresses[0] })
+        await contract.methods.writeComments(currentPostId, commentContent).send({ from: addresses[0] })
             .then(function(result) {
                 displayComment(addresses[0], commentContent);
                 $('#commentInput').val('');
@@ -690,34 +727,13 @@ $(document).on('click', '#submitComment', async function() {
         console.error("Error submitting comment:", error);
         alert('Failed to submit comment. Error: ' + error.message);
     }
+
+    // Hide the modal after submitting the comment
+    $('#commentFormModal').hide();
+    // Clear the comment input field
+    $('#commentText').val('');
 });
 
-// Function to display a single comment
-function displayComment(userAddress, comment) {
-    let commentDiv = `
-        <div class="comment">
-            <p><strong>${userAddress}</strong>: ${comment}</p>
-        </div>
-    `;
-    $('#commentsDisplay').append(commentDiv);
-}
-
-// Function to display all comments for a post
-async function displayCommentsForPost(postId) {
-    try {
-        let comments = await contract.methods.getCommentsPerPost(postId).call();
-        comments.forEach(comment => {
-            displayComment(comment.userWriter, comment.content);
-        });
-    } catch (error) {
-        console.error("Error fetching comments:", error);
-    }
-}
-
-// Initialize the display for a specific genre
-$('#lifestyleButton').click(function() {
-    displayPostsByGenre('Lifestyle');
-});
 
              
 
