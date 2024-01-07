@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>News Portal</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="assets/img/favicon.png" rel="icon">
+  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Lato:400,300,700,900" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <!--<link href="assets/css/project.css" rel="stylesheet">
+  <link href="assets/css/login.css" rel="stylesheet">-->
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <!--These four are needed for 'Write A Post CSS and Bootstrap'-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"></script>
+    <script src="scripts/user-service.js"></script>
+    
+
+</head>
+
+
+<body>
+
+    <section id="LoginDiv" class="login-div">
+        <p id="pleaseLogIn">Log In Using MetaMask Wallet</p>
+        <button id="connect" class="login-button">LOGIN</button>
+        <!--<p id="connectedAddress" style="display: none;">Connected address: <span></span></p>-->
+      </section>
+
+  <!-- ======= Header ======= -->
+  <section id="header">
+  <header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+      <div class="logo me-auto">
+        <h1><a href="index.html">News Portal</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero" onclick="ChangeTab.goToHome();">News</a></li>
+          <li><a class="nav-link scrollto" id= 'lifestyleButton' href="#lifestyle" onclick="ChangeTab.goToLifestyle();">Lifestyle</a></li>
+          <li><a class="nav-link scrollto" href="#tech" onclick="ChangeTab.goToTech();">Tech</a></li>
+          <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">Admin Panel</a></li>
+          <li><a class="nav-link scrollto" href="#logout" onclick="UserService.logout()">Logout</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav>
+    </div>
+
+  </header><!-- End #header -->
+</section>
+
+<!-- ======= Hero Section ======= -->
+<section id="HeroDiv">
+  <section id="hero">
+    <div class="hero-container">
+      <h1>Welcome to News Portal</h1>
+      <h2>Here you can find news about Lifestyle, Tech, and Business</h2>
+    </div>
+  </section>
+</section>
+<!--end of the hero div section-->
+
+  <main id="main">
+
+    <div id="genrePostsContainer"></div> <!-- ======= NOVO 2======= -->
+    <div id="detailedPost" style="display: none;"></div> <!-- ======= NOVO 2======= -->
+
+    <!-- ======= Our Lifestyle Section ======= -->
+    <div id="LifestyleDiv">
+    
+
+      <!-- ======= Detailed Lifestyle Section ======= -->
+      <section id="lifestyle-details" class="lifestyle">
+        <div class="container">
+          <div class="section-title">
+            <h2>LIFESTYLE</h2>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 order-1 order-lg-2">
+              <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
+              <h3>First Lifestyle Post</h3>
+              <p class="fst-italic">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </p>
+              <ul>
+                <li><i class="bi bi-check2-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+                </ul>
+              <p>
+                Ullamco laboris nisi ut aliquip ex ea commodo consequat.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End of Detailed Lifestyle Section -->
+    </div>
+
+
+    <!-- ======= Our Tech Section ======= -->
+    <div id="TechDiv">
+
+
+      <!-- ======= Detailed Tech Section ======= -->
+      <section id="tech-details" class="tech">
+        <div class="container">
+          <div class="section-title">
+            <h2>TECH</h2>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 order-1 order-lg-2">
+              <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
+            </div>
+            <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
+              <h3>First Tech Post</h3>
+              <p class="fst-italic">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              </p>
+              <ul>
+                <li><i class="bi bi-check2-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
+              </ul>
+              <p>
+                Ullamco laboris nisi ut aliquip ex ea commodo consequat. 
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End of Detailed Tech Section -->
+    </div>
+
+  
+  <div id="adminDiv">
+    <!-- ======= Admin Section ======= -->
+    <section id="admin">
+        <!-- Add your admin content here -->
+        <p>WELCOME ADMIN!</p>
+
+         <!-- Post Count Display NOVO -->
+        <p id="postCountDisplay">Number of posts: <span id="postCount">0</span></p>
+
+
+            <!-- Write Posts Button for Admin id="writePostBtn"-->
+        <button id="writePostBtn" style="display: none;">Write A Post</button>
+        <button id="deletePostBtn" style="display: none;">Delete A Post</button>
+        
+
+        <!--<div id="postsList"></div>-->
+        <div id="postsList">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Post ID</th>
+                        <th>Title</th>
+                        <th>Genre</th>
+                    </tr>
+                </thead>
+                <tbody id="postTableBody">
+                    <!-- Ovdje idu redovi za posts -->
+                </tbody>
+            </table>
+        </div>
+
+
+        <!-- Write Posts Form for Admin -->
+        <div id="writePosts" style="display: none;">
+            <h1>Create Post</h1>
+            <form id="postForm">
+                <div class="form-group">
+                    <label for="genre">Genre</label>
+                    <input type="text" class="form-control" id="genre" required>
+                </div>
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" class="form-control" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea class="form-control" id="content" rows="5" required></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="submitPost">Submit Post</button>
+                <button class="btn btn-default" id="cancelPost"> Cancel </button>
+            </form>
+        </div>
+
+            <!--Delete Button Prompt-->
+        <div id="deletePostModal" style="display: none;">
+            <form>
+                <div class="form-group">
+                    <label for="deletePostID">Enter Post ID to Delete</label>
+                    <input type="text" class="form-control" id="deletePostID" placeholder="Post ID">
+                </div>
+                <button type="button" class="btn btn-primary" id="confirmDelete">Save changes</button>
+                <button type="button" class="btn btn-secondary" id="cancelDelete">Close</button>
+            </form>
+        </div>
+
+    </section>
+    <!-- End ADMIN Section -->
+
+
+    
+    <!-- Div for User NOVO 2 -->
+    <div id="userDiv" style="display: none;"> 
+        <!-- Add your user content here -->
+        <p>Welcome User!</p>
+        <div id="commentDisplay"></div>
+        
+<!-- KOMENTARI-->
+<div id="commentFormModal" style="display: none;">
+    <form>
+        <div class="form-group">
+            <label for="commentText">Your Comment</label>
+            <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+        </div>
+        <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
+        <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
+    </form>
+</div>
+
+<!-- Comments Display Section -->
+<div id="commentsDisplay"></div>
+
+        
+
+        
+       
+    </div>
+</div>
+
+
+
+</main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>News Portal</span></strong>. All Rights Reserved
+      </div>
+      <div class="credits">
+        Designed by <a>NewsPortal</a>
+      </div>
+    </div>
+  </footer><!-- End #footer -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+
+  <!-- Template Main JS File -->
+  <script src="assets/js/main.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!--<script src="assets/js/ChangeTab.js"></script>-->
+
+  <script>
+    var ChangeTab = {
+      goToHome: function () {
+        $("#HeroDiv").show();
+        $("#LifestyleDiv, #TechDiv, #adminDiv,  #NewsDiv").hide();
+      },
+      goToLifestyle: function () {
+        $("#LifestyleDiv").show();
+        $("#HeroDiv, #TechDiv, #adminDiv,  #NewsDiv").hide();
+      },
+      goToTech: function () {
+        $("#TechDiv").show();
+        $("#LifestyleDiv, #HeroDiv, #adminDiv, #NewsDiv").hide();
+      },
+      goToAdminPanel: function () {
+        $("#adminDiv").show();
+        $("#TechDiv, #LifestyleDiv, #HeroDiv, #NewsDiv").hide();
+      },
+      goToNews: function () {
+        $("#NewsDiv").show();
+        $("#TechDiv, #LifestyleDiv, #HeroDiv, #adminDiv").hide();
+      }
+    };
+
+  
+  </script>
+<!--
+  <script>
+        $(document).ready(function () {
+            // Hide all sections except the login section
+            $('#header, #footer, #HeroDiv, #LifestyleDiv, #TechDiv, #BusinessDiv, #adminDiv, #NewsDiv').hide();
+            $('#LoginDiv').show(); // Show the login section by default
+        });
+  </script>-->
+
+<script>
+
+var currentPostId = null; // KOMENTARI
+
+    const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"}],"name":"PostDeletedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"}],"name":"commentWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentCountPerPost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentsPerPost","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"postID","type":"uint256"},{"internalType":"address","name":"userWriter","type":"address"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"numberOfCharacters","type":"uint256"}],"internalType":"struct NewsPortal.Comment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeComments","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+        //Najnoviji ABI
+
+$(document).ready(function () {
+    $('#header, #footer, #HeroDiv, #LifestyleDiv, #TechDiv, #adminDiv, #NewsDiv').hide();
+    $('#LoginDiv').show(); // Show the login section by default
+
+$('#connect').click(async function () {
+if (window.ethereum) {   
+    let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+    //console.log(addresses[0]);
+    window.web3 = new Web3(window.ethereum);
+    deployed_contract = '0x1858b7893738DAc95DF72461dcfafA182b0402eb'; //Najnoviji
+    
+    const contract = new web3.eth.Contract(abi, deployed_contract);
+    const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"; // JA
+    const lowerCaseAdminAddress = adminAddress.toLowerCase();
+
+    const adminAddress2 = "0xBFfB885Ee9adeF105Ced97e74577606eF1a85284"; // ILMA
+    const lowerCaseAdminAddress2 = adminAddress2.toLowerCase();
+  /*
+    $('#connect').hide();
+    $('#pleaseLogIn').hide();
+    $('#login-content').hide();
+    $('#connectedAddress').css('display', 'block');*/
+    $('#connectedAddress > span').html(addresses[0]);
+    
+    $('#connect').hide();
+    $('#LoginDiv').hide();
+    $('#header, #footer, #HeroDiv').show();
+    //$('#header, #footer, #HeroDiv/*, #LifestyleDiv, #TechDiv, #BusinessDiv, #adminDiv, #NewsDiv').show();
+
+
+
+    if (addresses[0] === lowerCaseAdminAddress || addresses[0] === lowerCaseAdminAddress2) {
+        //$('#HeroDiv').show();
+        // Show "Write A Post" button only for admins
+        //console.log(addresses[0]);
+        $('#postCountDisplay').show(); //NOVO
+        $('postCount').show(); //NOVO
+        $('#writePostBtn').show();
+        $('#deletePostBtn').show();
+        displayPostsByGenre('Lifestyle'); // NOVO 3
+        displayPostsByGenre('Tech'); //NOVO 3
+        getAllPosts();
+        updatePostCount(); //NOVO 2
+
+        async function displayPostsByGenre(genre) {
+    let posts = await contract.methods.getAllPostsPerGenre(genre).call();
+    
+    let postsContainer = $('#genrePostsContainer');
+    postsContainer.empty();
+
+    posts.forEach((post, index) => {
+        let postId = 'post_' + index;
+        let postCard = `
+            <div class="card" id="${postId}">
+              <div class="card-header">${post.genre}</div>
+              <div class="card-body">
+                <h5 class="card-title">${post.title}</h5>
+                <button class="btn btn-primary read-more-btn">Read More</button>
+              </div>
+            </div>
+        `;
+
+        postsContainer.append(postCard);
+
+        $('#' + postId + ' .read-more-btn').click(function() {
+            // Hide the card
+            $('#' + postId).hide();
+
+            // Show the detailed post content
+            $('#detailedPost').html(`
+                <h3>${post.title}</h3>
+                <p>${post.content}</p>
+                <button class="btn btn-primary back-btn">Back</button>
+            `).show();
+
+            // Back button functionality
+            $('.back-btn').click(function() {
+                $('#detailedPost').hide();
+                $('#' + postId).show();
+            });
+        });
+    });
+}
+
+
+
+
+
+
+$('#lifestyleButton').click(function() {
+    displayPostsByGenre('Lifestyle');
+});
+
+        $('#writePostBtn').click(function () {
+            // Show the create post form for admins
+            $('#writePosts').show();
+            $('#postsList').hide();
+            $('#writePostBtn').hide();
+        });
+
+        contract.events.newPostCreatedEvent()
+        .on('data', function (event) {
+        console.log("New post created: ", event);
+        $('#writePosts').hide();
+        $('#postsList').show();
+        $('#writePostBtn').show();
+        $('#deletePostBtn').show();
+        getAllPosts();
+        updatePostCount(); //NOVO
+        displayPostsByGenre(event.returnValues.genre); //ovo treba da se update tamo na drugim ekranima
+        });
+    
+
+    // Handle submit post button click
+    $('#submitPost').click(async function () {
+        const genre = $('#genre').val();
+        const title = $('#title').val();
+        const content = $('#content').val();
+
+        try {
+            await contract.methods.writePosts(genre, title, content).send({ from: addresses[0] }).then(function (result) {
+                alert('Post created successfully!');
+                $('#genre').val(''); //NOVO 2
+                $('#title').val(''); //NOVO 2
+                $('#content').val(''); //NOVO 2
+                    
+            });
+        } catch (error) {
+            console.error("Error creating post:", error);
+        }
+    });
+
+    $('#cancelPost').click(function () {
+        //event.stopPropagation();
+        event.preventDefault(); //zasad radi sa ovim
+        $('#title').val(''); //NOVO
+        $('#genre').val(''); //NOVO
+        $('#content').val(''); //NOVO
+        $('#writePosts').hide();
+        $('#postsList').show();
+        $('#writePostBtn').show();
+        getAllPosts();
+    });
+
+
+    async function getAllPosts() {
+        let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const contract = new web3.eth.Contract(abi, deployed_contract);
+        let posts = await contract.methods.getAllPosts().call({ from: addresses[0] });
+        //console.log(posts);
+
+        let tableContent = '';
+
+        for (let i = 0; i < posts.length; i++) {
+            tableContent += `
+                <tr>
+                    <td>${posts[i].id}</td>
+                    <td>${posts[i].title}</td>
+                    <td>${posts[i].genre}</td>
+                </tr>
+            `;
+        }
+
+        $('#postTableBody').html(tableContent);  // Update the content of the postTableBody
+    }
+
+    $('#deletePostBtn').click(function () {
+      // Show the delete post modal
+      $('#deletePostModal').show();
+      $('#postsList').hide();
+      $('#deletePostBtn').hide();
+    });
+
+
+
+$('#confirmDelete').click(async function () {
+    let postIdToDelete = $('#deletePostID').val();
+    let parsedPostIdToDelete = parseInt(postIdToDelete, 10);
+    console.log("Post ID to delete:", parsedPostIdToDelete);
+
+    try {
+        let posts = await contract.methods.getAllPosts().call({ from: addresses[0] });
+        let maxPostId = Math.max(...posts.map(post => parseInt(post.id, 10)));
+
+        if (isNaN(parsedPostIdToDelete) || parsedPostIdToDelete > maxPostId) {
+            alert('Invalid Post ID: Entered ID is invalid or does not exist.');
+            return;
+        }
+
+        await contract.methods.deletePost(parsedPostIdToDelete).send({ from: addresses[0] })
+            .then(function (result) {
+                alert('Post deleted successfully!');
+                // Refresh the post list if needed
+                getAllPosts();
+            });
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        alert('Failed to delete post. Error: ' + error.message);
+    }
+
+    $('#deletePostModal').hide(); // Hide the modal after attempting deletion
+    // Additional UI updates as needed
+});
+
+
+
+
+
+      
+
+    $('#cancelDelete').click(function () {
+        // Hide the modal and clear the input field
+        $('#deletePostID').val('');
+        $('#deletePostModal').hide();
+        $('#postsList').show();
+        $('#deletePostBtn').show();
+    });
+
+
+    contract.events.PostDeletedEvent()
+            .on('data', function (event) {
+            console.log("Post deleted: ", event);
+        //$('#deletePosts').hide();
+            $('#postsList').show();
+            getAllPosts();
+            //updatePostCount();  //NOVO
+            $('#writePostBtn').show();
+            $('#deletePostBtn').show();
+            displayPostsByGenre(event.returnValues.genre); //da se update i na drugim ekranima
+            });
+
+    async function deletePost(postId) {
+    try {
+        await contract.methods.deletePost(postId).send({ from: addresses[0] })
+        .then(function (result) {
+            alert('Post deleted successfully!');
+            //getAllPosts();
+        });
+    } catch (error) {
+        console.error("Error deleting post:", error);
+        alert('Failed to delete post.');
+    }
+    }
+    async function updatePostCount() {
+    try {
+        let postCount = await contract.methods.getCurrentPostCount().call({ from: addresses[0] });
+        $('#postCount').text(postCount);
+    } catch (error) {
+        console.error("Error fetching post count:", error);
+    }
+}
+    
+
+  } 
+
+         else {
+            // For regular users, show user content
+            //$('#adminDiv').hide();
+            $('#admin').hide();
+            $('#postCountDisplay').hide(); //NOVO 2
+            $('postCount').hide(); //NOVO 2
+            //$('$postLists').hide(); //NOVO 2
+            $('#userDiv').show();
+            $('#genrePostsContainer').show();
+
+
+    
+
+
+//KOMENTARII
+async function displayPostsByGenre(genre) {
+    let posts = await contract.methods.getAllPostsPerGenre(genre).call();
+    
+    let postsContainer = $('#genrePostsContainer');
+    postsContainer.empty();
+
+    posts.forEach((post, index) => {
+        let postId = 'post_' + index;
+        let postCard = `
+            <div class="card" id="${postId}">
+              <div class="card-header">${post.genre}</div>
+              <div class="card-body">
+                <h5 class="card-title">${post.title}</h5>
+                <button class="btn btn-primary read-more-btn">Read More</button>
+              </div>
+            </div>
+        `;
+
+        postsContainer.append(postCard);
+
+        $('#' + postId + ' .read-more-btn').click(function() {
+            // Hide the card
+            $('#' + postId).hide();
+
+            // Show the detailed post content
+           // Show the detailed post content and the write comment button
+$('#detailedPost').html(`
+    <h3>${post.title}</h3>
+    <p>${post.content}</p>
+    <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
+    <button class="btn btn-primary back-btn">Back</button>
+`).show();
+
+// Event handler for the Write Comment button
+$('#writeCommentBtn').click(function() {
+    // Display the comment submission modal
+    $('#commentFormModal').show();
+});
+
+        });
+    });
+}
+
+// Event delegation for dynamic elements
+$(document).on('click', '.read-more-btn', function() {
+    let postId = $(this).data('post-id');
+    currentPostId = postId; // Store the current post ID
+
+    let post = posts.find(p => p.id === postId);
+
+    // Hide all cards and show detailed post content
+    $('.card').hide();
+    $('#detailedPost').html(`
+        <h3>${post.title}</h3>
+        <p>${post.content}</p>
+        <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
+        <div id="commentsDisplay"></div>
+        <button class="btn btn-secondary back-btn">Back</button>
+    `).show();
+
+    // Fetch and display comments for this post
+    displayCommentsForPost(postId);
+});
+
+
+
+// Initialize the display for a specific genre
+$('#lifestyleButton').click(function() {
+    displayPostsByGenre('Lifestyle');
+});
+
+// Handle comment submission
+$('#confirmComment').click(async function() {
+    let commentContent = $('#commentText').val();
+
+    if (commentContent.length > 250) {
+        alert('Comment must be 250 characters or less.');
+        return;
+    }
+
+    if (currentPostId === null) {
+        alert('No post selected for commenting.');
+        return;
+    }
+
+    try {
+        // Submit comment to the blockchain
+        await contract.methods.writeComments(currentPostId, commentContent).send({ from: addresses[0] })
+            .then(function(result) {
+                displayComment(addresses[0], commentContent);
+                $('#commentInput').val('');
+            });
+    } catch (error) {
+        console.error("Error submitting comment:", error);
+        alert('Failed to submit comment. Error: ' + error.message);
+    }
+
+    // Hide the modal after submitting the comment
+    $('#commentFormModal').hide();
+    // Clear the comment input field
+    $('#commentText').val('');
+});
+
+
+             
+
+
+
+
+
+
+        }}
+    });
+
+    
+    
+    });
+
+
+
+
+
+</script>
+
+</body>
+
+
+</html>

@@ -33,6 +33,96 @@
     <!--These four are needed for 'Write A Post CSS and Bootstrap'-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"></script>
+    <script src="scripts/user-service.js"></script> <!--dodano za logout-->
+    
+    <style>
+      /* Style for genrePostsContainer */
+      #genrePostsContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 10px; /* Reduced margin */
+      }
+    
+      .card {
+        width: 300px;
+        margin-bottom: 10px; /* Reduced margin */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card */
+        text-align: justify;
+      }
+    
+      .card:hover {
+        transform: scale(1.05);
+      }
+    
+      .card-header {
+        background-color: #609c96;
+        color: white;
+        padding: 10px; /* Reduced padding */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card header */
+        text-align: justify;
+        font-weight: bold;
+      }
+    
+      .card-body {
+        padding: 12px; /* Reduced padding */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card body */
+        text-align: justify;
+        font-style: italic; 
+      }
+    
+      /* Style for detailedPost */
+      #detailedPost {
+        display: none;
+        margin-top: 10px;
+      }
+    
+      #detailedPost h3 {
+        color: #333;
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost heading */
+        text-align: justify;
+        font-weight: bold;
+      }
+    
+      #detailedPost p {
+        color: #555;
+        margin-bottom: 12px; /* Reduced margin */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost paragraph */
+        text-align: justify;
+      }
+    
+      #detailedPost button {
+        margin-top: 10px; /* Reduced margin */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost button */
+      }
+    
+      /* Additional styling for buttons */
+      .btn-primary,
+      .btn-secondary {
+        background-color: #609c96;
+        color: white;
+        border: none;
+        padding: 10px 14px; /* Reduced padding */
+        cursor: pointer;
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to buttons */
+      }
+    
+      .btn-primary:hover,
+      .btn-secondary:hover {
+        background-color: #609c96;
+      }
+
+       /* Additional styling for welcome paragraph */
+      #welcomeParagraph {
+        text-align: justify;
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 30px; /* Adjust the value as needed for spacing */
+      }
+    </style>
     
 
 </head>
@@ -52,7 +142,7 @@
     <div class="container d-flex align-items-center">
 
       <div class="logo me-auto">
-        <h1><a href="index.html">News Portal</a></h1>
+        <h1><a href="indexajla2.html">News Portal</a></h1>
       </div>
 
       <nav id="navbar" class="navbar">
@@ -60,8 +150,8 @@
           <li><a class="nav-link scrollto active" href="#hero" onclick="ChangeTab.goToHome();">News</a></li>
           <li><a class="nav-link scrollto" id= 'lifestyleButton' href="#lifestyle" onclick="ChangeTab.goToLifestyle();">Lifestyle</a></li>
           <li><a class="nav-link scrollto" href="#tech" onclick="ChangeTab.goToTech();">Tech</a></li>
-          <li><a class="nav-link scrollto" href="#business" onclick="ChangeTab.goToBusiness();">Business</a></li>
-          <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">ADMIN PANEL</a></li>
+          <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">Admin Panel</a></li>
+          <li><a class="nav-link scrollto" href="#logout" onclick="UserService.logout()">Logout</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -76,48 +166,31 @@
     <div class="hero-container">
       <h1>Welcome to News Portal</h1>
       <h2>Here you can find news about Lifestyle, Tech, and Business</h2>
-      <div class="button-container">
-        <a href="#lifestyle" id= 'lifestyleButton' class="btn-get-started scrollto" onclick="ChangeTab.goToLifestyle()">Lifestyle</a>
-        <a href="#tech" class="btn-get-started scrollto" onclick="ChangeTab.goToTech()">Tech</a>
-        <a href="#business" class="btn-get-started scrollto" onclick="ChangeTab.goToBusiness();">Business</a>
-      </div>
     </div>
-  </section><!-- #hero -->
+  </section>
 </section>
 <!--end of the hero div section-->
 
   <main id="main">
 
-    <div id="genrePostsContainer"></div> <!-- ======= NOVO 2======= -->
-    <div id="detailedPost" style="display: none;"></div> <!-- ======= NOVO 2======= -->
+    <!--<div id="genrePostsContainer"></div>--> <!-- ======= NOVO 2======= -->
+    <!--<div id="detailedPost" style="display: none;"></div> --><!-- ======= NOVO 2======= -->
 
     <!-- ======= Our Lifestyle Section ======= -->
     <div id="LifestyleDiv">
-    
-
       <!-- ======= Detailed Lifestyle Section ======= -->
       <section id="lifestyle-details" class="lifestyle">
         <div class="container">
           <div class="section-title">
             <h2>LIFESTYLE</h2>
           </div>
-          <div class="row">
-            <div class="col-lg-6 order-1 order-lg-2">
-              <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-            </div>
-            <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-              <h3>First Lifestyle Post</h3>
-              <p class="fst-italic">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </p>
-              <ul>
-                <li><i class="bi bi-check2-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                </ul>
-              <p>
-                Ullamco laboris nisi ut aliquip ex ea commodo consequat.
-              </p>
-            </div>
+          <div id="welcomeParagraph">
+            <p>Welcome to our Lifestyle section, where we explore the vibrant tapestry of modern living. Here, we curate a diverse array of articles that delve into the latest trends, tips, and insights shaping the way we lead our lives. From fashion and travel to health and wellness, our Lifestyle section is your go-to source for inspiration, information, and a glimpse into the ever-evolving world of contemporary living. Join us as we navigate the intersection of style, culture, and well-being, bringing you stories that celebrate the richness of life in all its facets. Whether you're seeking advice on personal development, exploring the hottest travel destinations, or staying updated on the latest lifestyle trends, we invite you to embark on this journey with us. Welcome to a space dedicated to enhancing your everyday experiences and helping you live your best life.</p>
           </div>
+        
+          <div id="genrePostsContainer"></div> <!-- ======= NOVO 2======= -->
+          <div id="detailedPost" style="display: none;"></div> <!-- ======= NOVO 2======= -->
+      
         </div>
       </section>
       <!-- End of Detailed Lifestyle Section -->
@@ -126,66 +199,24 @@
 
     <!-- ======= Our Tech Section ======= -->
     <div id="TechDiv">
-
-
       <!-- ======= Detailed Tech Section ======= -->
       <section id="tech-details" class="tech">
         <div class="container">
           <div class="section-title">
             <h2>TECH</h2>
           </div>
-          <div class="row">
-            <div class="col-lg-6 order-1 order-lg-2">
-              <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-            </div>
-            <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-              <h3>First Tech Post</h3>
-              <p class="fst-italic">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              </p>
-              <ul>
-                <li><i class="bi bi-check2-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-              </ul>
-              <p>
-                Ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-              </p>
-            </div>
+          <div id="welcomeParagraph">
+            <p>Welcome to our Tech section, your portal to the latest in digital innovation. Discover cutting-edge gadgets, software trends, and industry insights. From AI to cybersecurity and the newest electronics, stay connected to the forefront of technology. Whether you're a tech enthusiast or simply curious, we're here to inform and inspire you in this rapidly evolving digital landscape. Welcome to a space dedicated to decoding innovation and keeping you plugged into the pulse of tech.</p>
           </div>
+
+          <div id="genrePostsContainer"></div> <!-- ======= NOVO 2======= -->
+          <div id="detailedPost" style="display: none;"></div> <!-- ======= NOVO 2======= -->
+
         </div>
       </section>
       <!-- End of Detailed Tech Section -->
     </div>
 
-    <div id="BusinessDiv">
-      <!-- ======= Detailed Business Section ======= -->
-      <section id="business-details" class="business">
-          <div class="container">
-  
-              <div class="section-title">
-                  <h2>BUISNESS</h2>
-              </div>
-  
-              <div class="row">
-                  <div class="col-lg-6 order-1 order-lg-2">
-                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-                  </div>
-                  <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-                      <h3>First Business Post</h3>
-                      <p class="fst-italic">
-                          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                      </p>
-                      <ul>
-                          <li><i class="bi bi-check2-circle"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>       
-                      </ul>
-                      <p>
-                          Ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                      </p>
-                  </div>
-              </div>
-          </div>
-      </section>
-      <!-- End of Detailed Business Section -->
-  </div>
   
   <div id="adminDiv">
     <!-- ======= Admin Section ======= -->
@@ -263,25 +294,21 @@
         <p>Welcome User!</p>
         <div id="commentDisplay"></div>
         
-<!-- KOMENTARI-->
-<div id="commentFormModal" style="display: none;">
-    <form>
-        <div class="form-group">
-            <label for="commentText">Your Comment</label>
-            <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+        <!-- KOMENTARI-->
+        <div id="commentFormModal" style="display: none;">
+            <form>
+                <div class="form-group">
+                    <label for="commentText">Your Comment</label>
+                    <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
+                <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
+            </form>
         </div>
-        <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
-        <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
-    </form>
-</div>
 
-<!-- Comments Display Section -->
-<div id="commentsDisplay"></div>
-
-        
-
-        
-       
+        <!-- Comments Display Section -->
+        <div id="commentsDisplay"></div>
+  
     </div>
 </div>
 
@@ -319,27 +346,23 @@
     var ChangeTab = {
       goToHome: function () {
         $("#HeroDiv").show();
-        $("#LifestyleDiv, #TechDiv, #BusinessDiv, #adminDiv,  #NewsDiv").hide();
+        $("#LifestyleDiv, #TechDiv, #adminDiv,  #NewsDiv").hide();
       },
       goToLifestyle: function () {
         $("#LifestyleDiv").show();
-        $("#HeroDiv, #TechDiv, #BusinessDiv, #adminDiv,  #NewsDiv").hide();
+        $("#HeroDiv, #TechDiv, #adminDiv,  #NewsDiv").hide();
       },
       goToTech: function () {
         $("#TechDiv").show();
-        $("#LifestyleDiv, #HeroDiv, #BusinessDiv, #adminDiv,  #NewsDiv").hide();
-      },
-      goToBusiness: function () {
-        $("#BusinessDiv").show();
-        $("#TechDiv, #LifestyleDiv, #HeroDiv, #adminDiv, #NewsDiv").hide();
+        $("#LifestyleDiv, #HeroDiv, #adminDiv, #NewsDiv").hide();
       },
       goToAdminPanel: function () {
         $("#adminDiv").show();
-        $("#TechDiv, #LifestyleDiv, #HeroDiv, #BusinessDiv, #NewsDiv").hide();
+        $("#TechDiv, #LifestyleDiv, #HeroDiv, #NewsDiv").hide();
       },
       goToNews: function () {
         $("#NewsDiv").show();
-        $("#TechDiv, #LifestyleDiv, #HeroDiv, #BusinessDiv, #adminDiv").hide();
+        $("#TechDiv, #LifestyleDiv, #HeroDiv, #adminDiv").hide();
       }
     };
 
@@ -362,7 +385,7 @@ var currentPostId = null; // KOMENTARI
         //Najnoviji ABI
 
 $(document).ready(function () {
-    $('#header, #footer, #HeroDiv, #LifestyleDiv, #TechDiv, #BusinessDiv, #adminDiv, #NewsDiv').hide();
+    $('#header, #footer, #HeroDiv, #LifestyleDiv, #TechDiv, #adminDiv, #NewsDiv').hide();
     $('#LoginDiv').show(); // Show the login section by default
 
 $('#connect').click(async function () {
@@ -431,11 +454,18 @@ if (window.ethereum) {
 
             // Show the detailed post content
             $('#detailedPost').html(`
-                <h3>${post.title}</h3>
-                <p>${post.content}</p>
-                <button class="btn btn-primary back-btn">Back</button>
+                <div class="row">
+                <div class="col-lg-6 order-1 order-lg-2">
+                  <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
+                  <h3>${post.title}</h3>
+                  <p>${post.content}</p>
+                  <button class="btn btn-primary back-btn">Back</button>
+                </div>
+                </div>
             `).show();
-
+//<button class="btn btn-primary back-btn">Back</button>
             // Back button functionality
             $('.back-btn').click(function() {
                 $('#detailedPost').hide();
