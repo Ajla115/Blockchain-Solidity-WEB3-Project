@@ -149,7 +149,7 @@
         <ul>
           <li><a class="nav-link scrollto active" href="#hero" onclick="ChangeTab.goToHome();">News</a></li>
           <li><a class="nav-link scrollto" id= 'lifestyleButton' href="#lifestyle" onclick="ChangeTab.goToLifestyle();">Lifestyle</a></li>
-          <li><a class="nav-link scrollto" href="#tech" onclick="ChangeTab.goToTech();">Tech</a></li>
+          <li><a class="nav-link scrollto" id = 'techButton' href="#tech" onclick="ChangeTab.goToTech();">Tech</a></li>
           <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">Admin Panel</a></li>
           <li><a class="nav-link scrollto" href="#logout" onclick="UserService.logout()">Logout</a></li>
         </ul>
@@ -209,8 +209,8 @@
             <p>Welcome to our Tech section, your portal to the latest in digital innovation. Discover cutting-edge gadgets, software trends, and industry insights. From AI to cybersecurity and the newest electronics, stay connected to the forefront of technology. Whether you're a tech enthusiast or simply curious, we're here to inform and inspire you in this rapidly evolving digital landscape. Welcome to a space dedicated to decoding innovation and keeping you plugged into the pulse of tech.</p>
           </div>
 
-          <div id="genrePostsContainer"></div> <!-- ======= NOVO 2======= -->
-          <div id="detailedPost" style="display: none;"></div> <!-- ======= NOVO 2======= -->
+          <div id="genrePostsContainer2"></div> <!-- ======= NOVO 2======= -->
+          <div id="detailedPost2" style="display: none;"></div> <!-- ======= NOVO 2======= -->
 
         </div>
       </section>
@@ -424,7 +424,7 @@ if (window.ethereum) {
         $('#writePostBtn').show();
         $('#deletePostBtn').show();
         displayPostsByGenre('Lifestyle'); // NOVO 3
-        displayPostsByGenre('Tech'); //NOVO 3
+        displayPostsByGenre2('Tech'); //NOVO 3
         getAllPosts();
         updatePostCount(); //NOVO 2
 
@@ -475,6 +475,54 @@ if (window.ethereum) {
     });
 }
 
+async function displayPostsByGenre2(genre) {
+    let posts = await contract.methods.getAllPostsPerGenre(genre).call();
+    
+    let postsContainer = $('#genrePostsContainer2');
+    postsContainer.empty();
+
+    posts.forEach((post, index) => {
+        let postId = 'post_' + index;
+        let postCard = `
+            <div class="card" id="${postId}">
+              <div class="card-header">${post.genre}</div>
+              <div class="card-body">
+                <h5 class="card-title">${post.title}</h5>
+                <button class="btn btn-primary read-more-btn">Read More</button>
+              </div>
+            </div>
+        `;
+
+        postsContainer.append(postCard);
+
+        $('#' + postId + ' .read-more-btn').click(function() {
+            // Hide the card
+            $('#' + postId).hide();
+
+            // Show the detailed post content
+            $('#detailedPost2').html(`
+                <div class="row">
+                <div class="col-lg-6 order-1 order-lg-2">
+                  <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
+                </div>
+                <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
+                  <h3>${post.title}</h3>
+                  <p>${post.content}</p>
+                  <button class="btn btn-primary back-btn">Back</button>
+                </div>
+                </div>
+            `).show();
+//<button class="btn btn-primary back-btn">Back</button>
+            // Back button functionality
+            $('.back-btn').click(function() {
+                $('#detailedPost2').hide();
+                $('#' + postId).show();
+            });
+        });
+    });
+}
+
+
 
 
 
@@ -483,6 +531,13 @@ if (window.ethereum) {
 $('#lifestyleButton').click(function() {
     displayPostsByGenre('Lifestyle');
 });
+
+$('#techButton').click(function() {
+    displayPostsByGenre2('Tech');
+});
+
+
+
 
         $('#writePostBtn').click(function () {
             // Show the create post form for admins
@@ -655,6 +710,7 @@ $('#confirmDelete').click(async function () {
             //$('$postLists').hide(); //NOVO 2
             $('#userDiv').show();
             $('#genrePostsContainer').show();
+            
 
 
     
@@ -731,6 +787,122 @@ $(document).on('click', '.read-more-btn', function() {
 $('#lifestyleButton').click(function() {
     displayPostsByGenre('Lifestyle');
 });
+
+$('#techButton').click(function() {
+    displayPostsByGenre2('Tech');
+});
+
+
+// Handle comment submission
+$('#confirmComment').click(async function() {
+    let commentContent = $('#commentText').val();
+
+    if (commentContent.length > 250) {
+        alert('Comment must be 250 characters or less.');
+        return;
+    }
+
+    if (currentPostId === null) {
+        alert('No post selected for commenting.');
+        return;
+    }
+
+    try {
+        // Submit comment to the blockchain
+        await contract.methods.writeComments(currentPostId, commentContent).send({ from: addresses[0] })
+            .then(function(result) {
+                displayComment(addresses[0], commentContent);
+                $('#commentInput').val('');
+            });
+    } catch (error) {
+        console.error("Error submitting comment:", error);
+        alert('Failed to submit comment. Error: ' + error.message);
+    }
+
+    // Hide the modal after submitting the comment
+    $('#commentFormModal').hide();
+    // Clear the comment input field
+    $('#commentText').val('');
+});
+
+
+             
+
+async function displayPostsByGenre2(genre) {
+    let posts = await contract.methods.getAllPostsPerGenre(genre).call();
+    
+    let postsContainer = $('#genrePostsContainer2');
+    postsContainer.empty();
+
+    posts.forEach((post, index) => {
+        let postId = 'post_' + index;
+        let postCard = `
+            <div class="card" id="${postId}">
+              <div class="card-header">${post.genre}</div>
+              <div class="card-body">
+                <h5 class="card-title">${post.title}</h5>
+                <button class="btn btn-primary read-more-btn">Read More</button>
+              </div>
+            </div>
+        `;
+
+        postsContainer.append(postCard);
+
+        $('#' + postId + ' .read-more-btn').click(function() {
+            // Hide the card
+            $('#' + postId).hide();
+
+            // Show the detailed post content
+           // Show the detailed post content and the write comment button
+$('#detailedPost2').html(`
+    <h3>${post.title}</h3>
+    <p>${post.content}</p>
+    <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
+    <button class="btn btn-primary back-btn">Back</button>
+`).show();
+
+// Event handler for the Write Comment button
+$('#writeCommentBtn').click(function() {
+    // Display the comment submission modal
+    $('#commentFormModal').show();
+});
+
+        });
+    });
+}
+
+// Event delegation for dynamic elements
+$(document).on('click', '.read-more-btn', function() {
+    let postId = $(this).data('post-id');
+    currentPostId = postId; // Store the current post ID
+
+    let post = posts.find(p => p.id === postId);
+
+    // Hide all cards and show detailed post content
+    $('.card').hide();
+    $('#detailedPost2').html(`
+        <h3>${post.title}</h3>
+        <p>${post.content}</p>
+        <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
+        <div id="commentsDisplay"></div>
+        <button class="btn btn-secondary back-btn">Back</button>
+    `).show();
+
+    // Fetch and display comments for this post
+    displayCommentsForPost(postId);
+});
+
+
+
+// Initialize the display for a specific genre
+$('#lifestyleButton').click(function() {
+    displayPostsByGenre('Lifestyle');
+});
+
+$('#techButton').click(function() {
+    displayPostsByGenre2('Tech');
+});
+
 
 // Handle comment submission
 $('#confirmComment').click(async function() {
