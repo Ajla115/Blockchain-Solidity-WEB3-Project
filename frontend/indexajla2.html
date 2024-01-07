@@ -231,16 +231,16 @@
         <div id="commentFormModal2" style="display: none;">
           <form>
               <div class="form-group">
-                  <label for="commentText">Your Comment</label>
-                  <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+                  <label for="commentText2">Your Comment</label>
+                  <textarea class="form-control" id="commentText2" placeholder="Write your comment here" maxlength="250"></textarea>
               </div>
-              <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
-              <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
+              <button type="button" class="btn btn-primary" id="confirmComment2">Submit Comment</button>
+              <button type="button" class="btn btn-secondary" id="cancelComment2">Close</button>
           </form>
       </div>
 
       <!-- Comments Display Section -->
-      <div id="commentsDisplay"></div>
+      <div id="commentsDisplay2"></div>
 
         </div>
       </section>
@@ -874,7 +874,7 @@ $('#confirmComment').click(async function() {
 
 
              
-
+///PROVJERI
 async function displayPostsByGenre2(genre) {
     let posts = await contract.methods.getAllPostsPerGenre(genre).call();
     
@@ -904,7 +904,7 @@ async function displayPostsByGenre2(genre) {
 $('#detailedPost2').html(`
     <h3>${post.title}</h3>
     <p>${post.content}</p>
-    <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
+    <button class="btn btn-primary" id="writeCommentBtn2">Write Comment</button>
     <button class="btn btn-primary back-btn">Back</button>
 `).show();
  //ilma dodala si
@@ -915,7 +915,7 @@ $('#detailedPost2').html(`
                   });
 
 // Event handler for the Write Comment button
-$('#writeCommentBtn').click(function() {
+$('#writeCommentBtn2').click(function() {
     // Display the comment submission modal
     $('#commentFormModal2').show();
 
@@ -937,8 +937,8 @@ $(document).on('click', '.read-more-btn', function() {
     $('#detailedPost2').html(`
         <h3>${post.title}</h3>
         <p>${post.content}</p>
-        <button class="btn btn-primary" id="writeCommentBtn">Write Comment</button>
-        <div id="commentsDisplay"></div>
+        <button class="btn btn-primary" id="writeCommentBtn2">Write Comment</button>
+        <div id="commentsDisplay2"></div>
         <button class="btn btn-secondary back-btn">Back</button>
     `).show();
 
@@ -959,8 +959,8 @@ $('#techButton').click(function() {
 
 
 // Handle comment submission
-$('#confirmComment').click(async function() {
-    let commentContent = $('#commentText').val();
+$('#confirmComment2').click(async function() {
+    let commentContent = $('#commentText2').val();
 
     if (commentContent.length > 250) {
         alert('Comment must be 250 characters or less.');
@@ -987,11 +987,18 @@ $('#confirmComment').click(async function() {
     // Hide the modal after submitting the comment
     $('#commentFormModal2').hide();
     // Clear the comment input field
-    $('#commentText').val('');
+    $('#commentText2').val('');
 });
 
 
-             
+     //CANCEL COMMENT ILMA VIDIII
+ $('#cancelComment2').click(function () {
+        // Hide the modal and clear the input field
+        //$('#deletePostID').val('');
+        $('#commentFormModal2').hide();
+        //$('#postsList').show();
+        //$('#deletePostBtn').show();
+    });         
 
 
 
