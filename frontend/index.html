@@ -203,9 +203,8 @@
     <div id="userDiv" style="display: none;"> 
         <!-- Add your user content here -->
         <h2>WELCOME USER!</h2>
-        <p id="connectedAddress" style="display: none;">This is your address: <span></span></p>
-        <br><br>
-        <h3>Dear User, if you have any question please contact us by submiting this form: </h3>
+        <p id="connectedAddress" style="display: block; font-weight: normal; text-align: center;">This is your address: <span style="text-decoration: underline"></span></p>
+        <h3>Dear user, if you have any question, feel free to contact us by submiting this form: </h3>
         <br>
 
         <!-- Write Help Desk Service Information for User -->
@@ -356,16 +355,12 @@ if (window.ethereum) {
 
                 // Show the detailed post content
                 $('#detailedPost').html(`
-                    <div class="row">
-                    <div class="col-lg-6 order-1 order-lg-2">
-                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-                    </div>
-                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-                      <h3>${post.title}</h3>
-                      <p>${post.content}</p>
-                      <button class="btn btn-primary back-btn">Back</button>
-                    </div>
-                    </div>
+                <div class="col-12 pt-4 pt-lg-0 order-2 order-lg-1 full-width-text">
+  <h3>${post.title}</h3>
+  <p>${post.content}</p>
+  <button class="btn btn-primary back-btn">Back</button>
+</div>
+                    
                 `).show();
                 
                 // Back button functionality
@@ -378,6 +373,8 @@ if (window.ethereum) {
     }
 
         async function displayPostsByGenre2(genre) {
+
+
         let posts = await contract.methods.getAllPostsPerGenre(genre).call();
         
         let postsContainer = $('#genrePostsContainer2');
@@ -401,19 +398,17 @@ if (window.ethereum) {
                 // Hide the card
                 $('#' + postId).hide();
 
-                // Show the detailed post content
-                $('#detailedPost2').html(`
-                    <div class="row">
-                    <div class="col-lg-6 order-1 order-lg-2">
-                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-                    </div>
-                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-                      <h3>${post.title}</h3>
-                      <p>${post.content}</p>
-                      <button class="btn btn-primary back-btn">Back</button>
-                    </div>
-                    </div>
+                                // Show the detailed post content
+                                $('#detailedPost2').html(`
+                <div class="col-12 pt-4 pt-lg-0 order-2 order-lg-1 full-width-text">
+  <h3>${post.title}</h3>
+  <p>${post.content}</p>
+  <button class="btn btn-primary back-btn">Back</button>
+</div>
+                    
                 `).show();
+
+                
 
                 // Back button functionality
                 $('.back-btn').click(function() {
@@ -423,6 +418,9 @@ if (window.ethereum) {
             });
         });
     }
+
+    
+
 
         $('#lifestyleButton').click(function() {
             displayPostsByGenre('Lifestyle');
@@ -686,18 +684,15 @@ async function displayPostsByGenre(genre) {
 
             // Show the detailed post content
            
-              $('#detailedPost').html(`
-                  <div class="row">
-                    <div class="col-lg-6 order-1 order-lg-2">
-                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-                    </div>
-                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-                      <h3>${post.title}</h3>
-                      <p>${post.content}</p>
-                      <button class="btn btn-primary back-btn">Back</button>
-                    </div>
-                  </div>
-              `).show();
+                              // Show the detailed post content
+                              $('#detailedPost').html(`
+                <div class="col-12 pt-4 pt-lg-0 order-2 order-lg-1 full-width-text">
+  <h3>${post.title}</h3>
+  <p>${post.content}</p>
+  <button class="btn btn-primary back-btn">Back</button>
+</div>
+                    
+                `).show();
       // Back button functionality
       $('.back-btn').click(function() {
                       $('#detailedPost').hide();
@@ -762,20 +757,15 @@ async function displayPostsByGenre2(genre) {
             // Hide the card
             $('#' + postId).hide();
 
-            // Show the detailed post content
-           // Show the detailed post content and the write comment button
-            $('#detailedPost2').html(`
-                  <div class="row">
-                    <div class="col-lg-6 order-1 order-lg-2">
-                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
-                    </div>
-                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
-                      <h3>${post.title}</h3>
-                      <p>${post.content}</p>
-                      <button class="btn btn-primary back-btn">Back</button>
-                    </div>
-                  </div>
-            `).show();
+                            // Show the detailed post content
+                            $('#detailedPost2').html(`
+                <div class="col-12 pt-4 pt-lg-0 order-2 order-lg-1 full-width-text">
+  <h3>${post.title}</h3>
+  <p>${post.content}</p>
+  <button class="btn btn-primary back-btn">Back</button>
+</div>
+                    
+                `).show();
 
       // Back button functionality
       $('.back-btn').click(function() {
