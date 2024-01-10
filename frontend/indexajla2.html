@@ -948,6 +948,7 @@ $(document).on('click', '.read-more-btn', function() {
     displayCommentsForPost2(postId);
 });
 
+//Ovo je za tech
 async function displayCommentsForPost2(postId) {
     try {
         let comments = await contract.methods.getCommentsPerPost(postId).call();
@@ -959,6 +960,26 @@ async function displayCommentsForPost2(postId) {
     }
 }
 
+//Ovo je za lifestyle
+async function displayCommentsForPost(postId) {
+    try {
+        let comments = await contract.methods.getCommentsPerPost(postId).call();
+        comments.forEach(comment => {
+            displayComment(comment.userWriter, comment.content);
+        });
+    } catch (error) {
+        console.error("Error fetching comments:", error);
+    }
+}
+
+function displayComment(userAddress, comment) {
+    let commentDiv = `
+        <div class="comment">
+            <p><strong>${userAddress}</strong>: ${comment}</p>
+        </div>
+    `;
+    $('#commentsDisplay').append(commentDiv);
+}
 
 
 // Initialize the display for a specific genre
