@@ -18,16 +18,24 @@
  #genrePostsContainer {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-around;
-  margin-top: 10px; /* Reduced margin */
+  /*justify-content: space-around;
+  margin-top: 10px; *//* Reduced margin */
+}
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px; /* Adjust the gap between cards as needed */
+  margin: 0 auto; /* Center the container horizontally */
 }
 
 .card {
+  /* Your existing card styles */
   width: 300px;
-  margin-bottom: 10px; /* Reduced margin */
+  margin-bottom: 10px; /* Check and adjust this value */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease-in-out;
-  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card */
+  font-family: "Open Sans", sans-serif;
   text-align: justify;
 }
 
@@ -48,7 +56,7 @@
   padding: 12px; /* Reduced padding */
   font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card body */
   text-align: justify;
-  font-style: italic; 
+  font-style: italic;
 }
 
 /* Style for detailedPost */
@@ -237,7 +245,8 @@ h6,
 # Sections General
 --------------------------------------------------------------*/
 section {
-  padding: 60px 0;
+  /*40px*/
+  padding: 0px 0px;
 }
 
 .section-bg {
@@ -1233,6 +1242,7 @@ section {
   padding: 30px 0;
   color: #fff;
   font-size: 14px;
+  margin-top: 80px; /* Add margin above the footer */
 }
 
 #footer .copyright {
