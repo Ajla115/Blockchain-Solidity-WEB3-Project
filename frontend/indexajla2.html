@@ -799,7 +799,7 @@ $('#detailedPost').html(`
 
 // Event delegation for dynamic elements
 $(document).on('click', '.read-more-btn', function() {
-    let postId = $(this).data('post-id');
+    let postId = $(this).parent().parent().attr('id').split("_")[1];
     currentPostId = postId; // Store the current post ID
 
     let post = posts.find(p => p.id === postId);
@@ -834,7 +834,6 @@ $('#techButton').click(function() {
 // Handle comment submission
 $('#confirmComment').click(async function() {
     let commentContent = $('#commentText').val();
-   
 
     if (commentContent.length > 250) {
         alert('Comment must be 250 characters or less.');
@@ -848,9 +847,10 @@ $('#confirmComment').click(async function() {
 
     try {
         // Submit comment to the blockchain
+        console.log(currentPostId, commentContent)
         await contract.methods.writeComments(currentPostId, commentContent).send({ from: addresses[0] })
             .then(function(result) {
-                displayComment(addresses[0], commentContent);
+                displayCommentsForPost(addresses[0], commentContent);
                 $('#commentInput').val('');
             });
     } catch (error) {
@@ -928,7 +928,8 @@ $('#writeCommentBtn2').click(function() {
 
 // Event delegation for dynamic elements
 $(document).on('click', '.read-more-btn', function() {
-    let postId = $(this).data('post-id');
+  let postId = $(this).parent().parent().attr('id').split("_")[1];
+    //let postId = $(this).data('post-id');
     currentPostId = postId; // Store the current post ID
 
     let post = posts.find(p => p.id === postId);
