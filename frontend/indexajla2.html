@@ -24,6 +24,8 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+  <!--<link href="assets/css/project.css" rel="stylesheet">
+  <link href="assets/css/login.css" rel="stylesheet">-->
 
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -31,7 +33,98 @@
     <!--These four are needed for 'Write A Post CSS and Bootstrap'-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"></script>
+    <script src="scripts/user-service.js"></script> <!--dodano za logout-->
     
+    <style>
+      /* Style for genrePostsContainer */
+      #genrePostsContainer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-top: 10px; /* Reduced margin */
+      }
+    
+      .card {
+        width: 300px;
+        margin-bottom: 10px; /* Reduced margin */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out;
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card */
+        text-align: justify;
+      }
+    
+      .card:hover {
+        transform: scale(1.05);
+      }
+    
+      .card-header {
+        background-color: #609c96;
+        color: white;
+        padding: 10px; /* Reduced padding */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card header */
+        text-align: justify;
+        font-weight: bold;
+      }
+    
+      .card-body {
+        padding: 12px; /* Reduced padding */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card body */
+        text-align: justify;
+        font-style: italic; 
+      }
+    
+      /* Style for detailedPost */
+      #detailedPost {
+        display: none;
+        margin-top: 10px;
+      }
+    
+      #detailedPost h3 {
+        color: #333;
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost heading */
+        text-align: justify;
+        font-weight: bold;
+      }
+    
+      #detailedPost p {
+        color: #555;
+        margin-bottom: 12px; /* Reduced margin */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost paragraph */
+        text-align: justify;
+      }
+    
+      #detailedPost button {
+        margin-top: 10px; /* Reduced margin */
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost button */
+      }
+    
+      /* Additional styling for buttons */
+      .btn-primary,
+      .btn-secondary {
+        background-color: #609c96;
+        color: white;
+        border: none;
+        padding: 10px 14px; /* Reduced padding */
+        cursor: pointer;
+        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to buttons */
+      }
+    
+      .btn-primary:hover,
+      .btn-secondary:hover {
+        background-color: #609c96;
+      }
+
+       /* Additional styling for welcome paragraph */
+      #welcomeParagraph {
+        text-align: justify;
+        font-size: 16px;
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 30px; /* Adjust the value as needed for spacing */
+      }
+    </style>
+    
+
 </head>
 
 
@@ -40,6 +133,7 @@
     <section id="LoginDiv" class="login-div">
         <p id="pleaseLogIn">Log In Using MetaMask Wallet</p>
         <button id="connect" class="login-button">LOGIN</button>
+        <!--<p id="connectedAddress" style="display: none;">Connected address: <span></span></p>-->
       </section>
 
   <!-- ======= Header ======= -->
@@ -57,7 +151,7 @@
           <li><a class="nav-link scrollto" id= 'lifestyleButton' href="#lifestyle" onclick="ChangeTab.goToLifestyle();">Lifestyle</a></li>
           <li><a class="nav-link scrollto" id = 'techButton' href="#tech" onclick="ChangeTab.goToTech();">Tech</a></li>
           <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">Panel</a></li>
-          <li><a class="nav-link scrollto" href="indexajla2.html">Logout</a></li> 
+          <li><a class="nav-link scrollto" href="indexajla2.html">Logout</a></li> <!--Kada se kod prebaci pri kliku na index onda je full logout ne treba js-->
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -78,6 +172,9 @@
 <!--end of the hero div section-->
 
   <main id="main">
+
+    <!--<div id="genrePostsContainer"></div>--> <!-- ======= NOVO 2======= -->
+    <!--<div id="detailedPost" style="display: none;"></div> --><!-- ======= NOVO 2======= -->
 
     <!-- ======= Our Lifestyle Section ======= -->
     <div id="LifestyleDiv">
@@ -104,7 +201,7 @@
               <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
               <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
           </form>
-      </div>
+      </div> 
 
       <!-- Comments Display Section -->
       <div id="commentsDisplay"></div>
@@ -160,10 +257,13 @@
          <!-- Post Count Display NOVO -->
         <p id="postCountDisplay">Number of posts: <span id="postCount">0</span></p>
 
+
             <!-- Write Posts Button for Admin id="writePostBtn"-->
         <button id="writePostBtn" style="display: none;">Write A Post</button>
         <button id="deletePostBtn" style="display: none;">Delete A Post</button>
+        <button id="addANewAdmin" style="display: none;">Add a New Admin</button>
         
+
         <!--<div id="postsList"></div>-->
         <div id="postsList">
             <table class="table">
@@ -179,6 +279,7 @@
                 </tbody>
             </table>
         </div>
+
 
         <!-- Write Posts Form for Admin -->
         <div id="writePosts" style="display: none;">
@@ -213,19 +314,67 @@
             </form>
         </div>
 
+            <!--add a New Admin Prompt-->
+            <div id="addANewAdminModal" style="display: none;">
+                <form>
+                    <div class="form-group">
+                        <label for="adminAddress">Enter New Admin Address to Save</label>
+                        <input type="text" class="form-control" id="adminAddress" placeholder="New Admin Address">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="confirmNewAdmin">Save changes</button>
+                    <button type="button" class="btn btn-secondary" id="cancelNewAdmin">Close</button>
+                </form>
+            </div>
+
     </section>
     <!-- End ADMIN Section -->
 
-  <!-- Div for User NOVO 2 -->
-  <div id="userDiv" style="display: none;"> 
-      <!-- Add your user content here -->
-      <p>Welcome User!</p>
-      <p id="connectedAddress" style="display: none;">This is your address: <span></span></p>
-      <div id="commentsDisplay"></div>
 
-  </div>
+    
+    <!-- Div for User NOVO 2 -->
+    <div id="userDiv" style="display: none;"> 
+        <!-- Add your user content here -->
+        <p>Welcome User!</p>
+        <!--<div id="commentDisplay"></div>-->
+       <!-- <section class="login-div">-->
+        <p id="connectedAddress" style="display: none;">This is your address: <span></span></p>
+        <!--</section>-->
+        <!-- KOMENTARI-->
+        <!--
+        <div id="commentFormModal" style="display: none;">
+            <form>
+                <div class="form-group">
+                    <label for="commentText">Your Comment</label>
+                    <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
+                <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
+            </form>
+        </div>
+-->
+        <!-- Comments Display Section -->
+        <div id="commentsDisplay"></div>
 
+        <!-- Write Help Desk Service Information for User -->
+        <div id="writeHelpDeskItem" style="display: none;">
+            <form id="postForm2">
+                <div class="form-group">
+                    <label for="topic">topic</label>
+                    <input type="text" class="form-control" id="topic" required>
+                </div>
+                <div class="form-group">
+                    <label for="contentOfProblem">Content</label>
+                    <textarea class="form-control" id="contentOfProblem" rows="5" required></textarea>
+                </div>
+                <button type="button" class="btn btn-primary" id="submitRequest">Submit</button>
+                <button class="btn btn-default" id="cancelRequest"> Cancel </button>
+            </form>
+        </div>
+  
+    </div>
 </div>
+
+
 
 </main><!-- End #main -->
 
@@ -278,14 +427,16 @@
         $("#TechDiv, #LifestyleDiv, #HeroDiv, #adminDiv").hide();
       }
     };
+
+  
   </script>
 
 
 <script>
 
-var currentPostId = null; // KOMENTARI
 
-    const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"}],"name":"PostDeletedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"postID","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"commentID","type":"uint256"}],"name":"commentWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"commentsPerPostID","type":"uint256"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentCountPerPost","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"}],"name":"getCommentsPerPost","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"uint256","name":"postID","type":"uint256"},{"internalType":"address","name":"userWriter","type":"address"},{"internalType":"string","name":"content","type":"string"},{"internalType":"uint256","name":"numberOfCharacters","type":"uint256"}],"internalType":"struct NewsPortal.Comment[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_postID","type":"uint256"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeComments","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"string","name":"","type":"string"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+
+    const abi = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"}],"name":"PostDeletedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"helpDeskItemID","type":"uint256"},{"indexed":false,"internalType":"string","name":"topic","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"helpDeskItemWrittenEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"address","name":"_newAdminAddress","type":"address"}],"name":"newAdminAddedEvent","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":false,"internalType":"string","name":"genre","type":"string"},{"indexed":false,"internalType":"string","name":"title","type":"string"},{"indexed":false,"internalType":"string","name":"content","type":"string"}],"name":"newPostCreatedEvent","type":"event"},{"inputs":[{"internalType":"address","name":"newAdmin","type":"address"}],"name":"addAdmin","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_id","type":"uint256"}],"name":"deletePost","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"getAllPosts","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_wantedGenre","type":"string"}],"name":"getAllPostsPerGenre","outputs":[{"components":[{"internalType":"uint256","name":"id","type":"uint256"},{"internalType":"string","name":"genre","type":"string"},{"internalType":"string","name":"title","type":"string"},{"internalType":"string","name":"content","type":"string"}],"internalType":"struct NewsPortal.Post[]","name":"","type":"tuple[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getCurrentPostCount","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"string","name":"_topic","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writeHelpDeskItem","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"string","name":"_genre","type":"string"},{"internalType":"string","name":"_title","type":"string"},{"internalType":"string","name":"_content","type":"string"}],"name":"writePosts","outputs":[],"stateMutability":"nonpayable","type":"function"}];
         //Najnoviji ABI
 
 $(document).ready(function () {
@@ -297,7 +448,7 @@ if (window.ethereum) {
     let addresses = await window.ethereum.request({ method: 'eth_requestAccounts' });
     //console.log(addresses[0]);
     window.web3 = new Web3(window.ethereum);
-    deployed_contract = '0x1858b7893738DAc95DF72461dcfafA182b0402eb'; //Najnoviji
+    deployed_contract = '0xDc53a9B2BceEfF5e177E44b4A25179abD86C1Dbb'; //Najnoviji
     
     const contract = new web3.eth.Contract(abi, deployed_contract);
     const adminAddress = "0x4A6D300C16fDbEc06AD04Bf56f79C69B82F7e191"; // JA
@@ -330,6 +481,8 @@ if (window.ethereum) {
         $('postCount').show(); //NOVO
         $('#writePostBtn').show();
         $('#deletePostBtn').show();
+        $('#addANewAdmin').show();
+
         displayPostsByGenre('Lifestyle'); // NOVO 3
         displayPostsByGenre2('Tech'); //NOVO 3
         getAllPosts();
@@ -372,6 +525,7 @@ if (window.ethereum) {
                 </div>
                 </div>
             `).show();
+//<button class="btn btn-primary back-btn">Back</button>
             // Back button functionality
             $('.back-btn').click(function() {
                 $('#detailedPost').hide();
@@ -459,9 +613,13 @@ async function displayPostsByGenre2(genre) {
         $('#postsList').show();
         $('#writePostBtn').show();
         $('#deletePostBtn').show();
+        $('#addANewAdmin').show();
         getAllPosts();
         updatePostCount(); //NOVO
         displayPostsByGenre(event.returnValues.genre); //ovo treba da se update tamo na drugim ekranima
+        displayPostsByGenre2(event.returnValues.genre); //ovo treba da se update tamo na drugim ekranima
+
+
         });
     
 
@@ -525,6 +683,12 @@ async function displayPostsByGenre2(genre) {
       $('#deletePostBtn').hide();
     });
 
+    $('#addANewAdmin').click(function () {
+      // Show the add admin post modal
+      $('#addANewAdminModal').show();
+      $('#postsList').hide();
+      $('#addANewAdmin').hide();
+    });
 
 
 $('#confirmDelete').click(async function () {
@@ -568,6 +732,8 @@ $('#confirmDelete').click(async function () {
         $('#deletePostModal').hide();
         $('#postsList').show();
         $('#deletePostBtn').show();
+        $('#addANewAdmin').show();
+
     });
 
 
@@ -580,7 +746,10 @@ $('#confirmDelete').click(async function () {
             //updatePostCount();  //NOVO
             $('#writePostBtn').show();
             $('#deletePostBtn').show();
+            $('#addANewAdmin').show();
             displayPostsByGenre(event.returnValues.genre); //da se update i na drugim ekranima
+            displayPostsByGenre2(event.returnValues.genre); //da se update i na drugim ekranima
+
             });
 
     async function deletePost(postId) {
@@ -603,6 +772,50 @@ $('#confirmDelete').click(async function () {
         console.error("Error fetching post count:", error);
     }
 }
+
+//Functions to add a new admin
+$('#confirmNewAdmin').click(async function () {
+    const newAdmin = $('#adminAddress').val();
+
+    try {
+            await contract.methods.addAdmin(newAdmin).send({ from: addresses[0] }).then(function (result) {
+                alert('New Admin added successfully!');
+
+                    
+            });
+        } catch (error) {
+            console.error("Error while adding a new admin:", error);
+        }
+
+        $('#addANewAdminModal').hide(); 
+    });
+  
+
+    $('#cancelNewAdmin').click(function () {
+        // Hide the modal and clear the input field
+        $('#adminAddress').val('');
+        $('#addANewAdminModal').hide();
+        $('#postsList').show();
+        $('#deletePostBtn').show();
+        $('#addANewAdmin').show();
+
+    });
+
+
+    contract.events.newAdminAddedEvent()
+            .on('data', function (event) {
+            console.log("New Admin added: ", event);
+        //$('#deletePosts').hide();
+            $('#postsList').show();
+            getAllPosts();
+            //updatePostCount();  //NOVO
+            $('#writePostBtn').show();
+            $('#deletePostBtn').show();
+            $('#addANewAdmin').show();
+            //displayPostsByGenre(event.returnValues.genre); //da se update i na drugim ekranima
+            });
+
+
     
 
   } //END FOR ADMIN
@@ -618,6 +831,7 @@ $('#confirmDelete').click(async function () {
             $('#genrePostsContainer').show();
             $('#connectedAddress').show();
             $('#connectedAddress > span').html(addresses);
+            $('#writeHelpDeskItem').show();
             
 
 
@@ -914,7 +1128,51 @@ $('#confirmComment2').click(async function() {
         $('#commentFormModal2').hide();
         //$('#postsList').show();
         //$('#deletePostBtn').show();
-    });         
+    });   
+
+
+
+    contract.events.helpDeskItemWrittenEvent()
+        .on('data', function (event) {
+        console.log("New help desk item created: ", event);
+        $('#topic').val(''); 
+        $('#contentOfProblem').val('');
+        
+        });
+    
+
+    // Handle submit post button click
+    $('#submitRequest').click(async function () {
+        const topic = $('#topic').val();
+        const contentOfProblem = $('#contentOfProblem').val();
+
+        if (contentOfProblem.length > 250 ) {
+        alert('Problem description is too long. Please provide a shorter description.');
+        return;
+    }
+
+        try {
+            await contract.methods.writeHelpDeskItem(topic, contentOfProblem).send({ from: addresses[0] }).then(function (result) {
+                alert('Your request has been successfully sent!');
+                //$('#topic').val(''); 
+                //$('#contentOfProblem').val('');
+                    
+            });
+        } catch (error) {
+            console.error("Error while submitting the rquest:", error);
+        }
+    });
+
+    $('#cancelRequest').click(function () {
+        //event.stopPropagation();
+        event.preventDefault(); //zasad radi sa ovim
+        $('#topic').val(''); 
+        $('#contentOfProblem').val('');
+    });
+
+    
+    
+
 
 
 
