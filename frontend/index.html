@@ -399,13 +399,17 @@ if (window.ethereum) {
                 $('#' + postId).hide();
 
                                 // Show the detailed post content
-                                $('#detailedPost2').html(`
-                <div class="col-12 pt-4 pt-lg-0 order-2 order-lg-1 full-width-text">
-  <h3>${post.title}</h3>
-  <p>${post.content}</p>
-  <button class="btn btn-primary back-btn">Back</button>
-</div>
-                    
+                $('#detailedPost2').html(`
+                    <div class="row">
+                    <div class="col-lg-6 order-1 order-lg-2">
+                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
+                      <h3>${post.title}</h3>
+                      <p>${post.content}</p>
+                      <button class="btn btn-primary back-btn">Back</button>
+                    </div>
+                    </div>
                 `).show();
 
                 
@@ -685,13 +689,17 @@ async function displayPostsByGenre(genre) {
             // Show the detailed post content
            
                               // Show the detailed post content
-                              $('#detailedPost').html(`
-                <div class="col-12 pt-4 pt-lg-0 order-2 order-lg-1 full-width-text">
-  <h3>${post.title}</h3>
-  <p>${post.content}</p>
-  <button class="btn btn-primary back-btn">Back</button>
-</div>
-                    
+                $('#detailedPost').html(`
+                    <div class="row">
+                    <div class="col-lg-6 order-1 order-lg-2">
+                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
+                      <h3>${post.title}</h3>
+                      <p>${post.content}</p>
+                      <button class="btn btn-primary back-btn">Back</button>
+                    </div>
+                    </div>
                 `).show();
       // Back button functionality
       $('.back-btn').click(function() {
@@ -758,13 +766,17 @@ async function displayPostsByGenre2(genre) {
             $('#' + postId).hide();
 
                             // Show the detailed post content
-                            $('#detailedPost2').html(`
-                <div class="col-12 pt-4 pt-lg-0 order-2 order-lg-1 full-width-text">
-  <h3>${post.title}</h3>
-  <p>${post.content}</p>
-  <button class="btn btn-primary back-btn">Back</button>
-</div>
-                    
+                $('#detailedPost2').html(`
+                    <div class="row">
+                    <div class="col-lg-6 order-1 order-lg-2">
+                      <img src="assets/img/about-img.jpg" class="img-fluid" alt="">
+                    </div>
+                    <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
+                      <h3>${post.title}</h3>
+                      <p>${post.content}</p>
+                      <button class="btn btn-primary back-btn">Back</button>
+                    </div>
+                    </div>
                 `).show();
 
       // Back button functionality
