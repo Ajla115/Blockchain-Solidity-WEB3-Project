@@ -5,7 +5,102 @@
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
 */
+.btn.btn-primary.read-more-btn,
+.btn.btn-primary.back-btn,
+.btn.btn-primary {
+  background-color: #70b9b0;
+  color: #fff;
+}
 
+/*added from hmtl*/
+ /* Style for genrePostsContainer */
+
+ #genrePostsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 10px; /* Reduced margin */
+}
+
+.card {
+  width: 300px;
+  margin-bottom: 10px; /* Reduced margin */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card */
+  text-align: justify;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.card-header {
+  background-color: #609c96;
+  color: white;
+  padding: 10px; /* Reduced padding */
+  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card header */
+  text-align: justify;
+  font-weight: bold;
+}
+
+.card-body {
+  padding: 12px; /* Reduced padding */
+  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card body */
+  text-align: justify;
+  font-style: italic; 
+}
+
+/* Style for detailedPost */
+#detailedPost {
+  display: none;
+  margin-top: 10px;
+}
+
+#detailedPost h3 {
+  color: #333;
+  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost heading */
+  text-align: justify;
+  font-weight: bold;
+}
+
+#detailedPost p {
+  color: #555;
+  margin-bottom: 12px; /* Reduced margin */
+  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost paragraph */
+  text-align: justify;
+}
+
+#detailedPost button {
+  margin-top: 10px; /* Reduced margin */
+  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost button */
+}
+
+/* Additional styling for buttons */
+.btn-primary,
+.btn-secondary {
+  background-color: #609c96;
+  color: white;
+  border: none;
+  padding: 10px 14px; /* Reduced padding */
+  cursor: pointer;
+  font-family: "Open Sans", sans-serif; /* Apply Open Sans font to buttons */
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  background-color: #609c96;
+}
+
+ /* Additional styling for welcome paragraph */
+#welcomeParagraph {
+  text-align: justify;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6;
+  margin-bottom: 30px; /* Adjust the value as needed for spacing */
+}
+/*ADDED FROM HTML*/
 /*login*/
 /* Centered and Smaller LoginDiv styles */
 /* Centered LoginDiv styles */

@@ -24,8 +24,6 @@
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-  <!--<link href="assets/css/project.css" rel="stylesheet">
-  <link href="assets/css/login.css" rel="stylesheet">-->
 
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
@@ -33,98 +31,7 @@
     <!--These four are needed for 'Write A Post CSS and Bootstrap'-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/4.2.2/web3.min.js"></script>
-    <script src="scripts/user-service.js"></script> <!--dodano za logout-->
     
-    <style>
-      /* Style for genrePostsContainer */
-      #genrePostsContainer {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        margin-top: 10px; /* Reduced margin */
-      }
-    
-      .card {
-        width: 300px;
-        margin-bottom: 10px; /* Reduced margin */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
-        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card */
-        text-align: justify;
-      }
-    
-      .card:hover {
-        transform: scale(1.05);
-      }
-    
-      .card-header {
-        background-color: #609c96;
-        color: white;
-        padding: 10px; /* Reduced padding */
-        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card header */
-        text-align: justify;
-        font-weight: bold;
-      }
-    
-      .card-body {
-        padding: 12px; /* Reduced padding */
-        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to card body */
-        text-align: justify;
-        font-style: italic; 
-      }
-    
-      /* Style for detailedPost */
-      #detailedPost {
-        display: none;
-        margin-top: 10px;
-      }
-    
-      #detailedPost h3 {
-        color: #333;
-        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost heading */
-        text-align: justify;
-        font-weight: bold;
-      }
-    
-      #detailedPost p {
-        color: #555;
-        margin-bottom: 12px; /* Reduced margin */
-        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost paragraph */
-        text-align: justify;
-      }
-    
-      #detailedPost button {
-        margin-top: 10px; /* Reduced margin */
-        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to detailedPost button */
-      }
-    
-      /* Additional styling for buttons */
-      .btn-primary,
-      .btn-secondary {
-        background-color: #609c96;
-        color: white;
-        border: none;
-        padding: 10px 14px; /* Reduced padding */
-        cursor: pointer;
-        font-family: "Open Sans", sans-serif; /* Apply Open Sans font to buttons */
-      }
-    
-      .btn-primary:hover,
-      .btn-secondary:hover {
-        background-color: #609c96;
-      }
-
-       /* Additional styling for welcome paragraph */
-      #welcomeParagraph {
-        text-align: justify;
-        font-size: 16px;
-        color: #333;
-        line-height: 1.6;
-        margin-bottom: 30px; /* Adjust the value as needed for spacing */
-      }
-    </style>
-    
-
 </head>
 
 
@@ -133,7 +40,6 @@
     <section id="LoginDiv" class="login-div">
         <p id="pleaseLogIn">Log In Using MetaMask Wallet</p>
         <button id="connect" class="login-button">LOGIN</button>
-        <!--<p id="connectedAddress" style="display: none;">Connected address: <span></span></p>-->
       </section>
 
   <!-- ======= Header ======= -->
@@ -151,7 +57,7 @@
           <li><a class="nav-link scrollto" id= 'lifestyleButton' href="#lifestyle" onclick="ChangeTab.goToLifestyle();">Lifestyle</a></li>
           <li><a class="nav-link scrollto" id = 'techButton' href="#tech" onclick="ChangeTab.goToTech();">Tech</a></li>
           <li><a class="nav-link scrollto" href="#admin" onclick="ChangeTab.goToAdminPanel();">Panel</a></li>
-          <li><a class="nav-link scrollto" href="indexajla2.html">Logout</a></li> <!--Kada se kod prebaci pri kliku na index onda je full logout ne treba js-->
+          <li><a class="nav-link scrollto" href="indexajla2.html">Logout</a></li> 
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
@@ -172,9 +78,6 @@
 <!--end of the hero div section-->
 
   <main id="main">
-
-    <!--<div id="genrePostsContainer"></div>--> <!-- ======= NOVO 2======= -->
-    <!--<div id="detailedPost" style="display: none;"></div> --><!-- ======= NOVO 2======= -->
 
     <!-- ======= Our Lifestyle Section ======= -->
     <div id="LifestyleDiv">
@@ -257,12 +160,10 @@
          <!-- Post Count Display NOVO -->
         <p id="postCountDisplay">Number of posts: <span id="postCount">0</span></p>
 
-
             <!-- Write Posts Button for Admin id="writePostBtn"-->
         <button id="writePostBtn" style="display: none;">Write A Post</button>
         <button id="deletePostBtn" style="display: none;">Delete A Post</button>
         
-
         <!--<div id="postsList"></div>-->
         <div id="postsList">
             <table class="table">
@@ -278,7 +179,6 @@
                 </tbody>
             </table>
         </div>
-
 
         <!-- Write Posts Form for Admin -->
         <div id="writePosts" style="display: none;">
@@ -316,36 +216,16 @@
     </section>
     <!-- End ADMIN Section -->
 
+  <!-- Div for User NOVO 2 -->
+  <div id="userDiv" style="display: none;"> 
+      <!-- Add your user content here -->
+      <p>Welcome User!</p>
+      <p id="connectedAddress" style="display: none;">This is your address: <span></span></p>
+      <div id="commentsDisplay"></div>
 
-    
-    <!-- Div for User NOVO 2 -->
-    <div id="userDiv" style="display: none;"> 
-        <!-- Add your user content here -->
-        <p>Welcome User!</p>
-        <!--<div id="commentDisplay"></div>-->
-       <!-- <section class="login-div">-->
-        <p id="connectedAddress" style="display: none;">This is your address: <span></span></p>
-        <!--</section>-->
-        <!-- KOMENTARI-->
-        <!--
-        <div id="commentFormModal" style="display: none;">
-            <form>
-                <div class="form-group">
-                    <label for="commentText">Your Comment</label>
-                    <textarea class="form-control" id="commentText" placeholder="Write your comment here" maxlength="250"></textarea>
-                </div>
-                <button type="button" class="btn btn-primary" id="confirmComment">Submit Comment</button>
-                <button type="button" class="btn btn-secondary" id="cancelComment">Close</button>
-            </form>
-        </div>
--->
-        <!-- Comments Display Section -->
-        <div id="commentsDisplay"></div>
-  
-    </div>
+  </div>
+
 </div>
-
-
 
 </main><!-- End #main -->
 
@@ -398,8 +278,6 @@
         $("#TechDiv, #LifestyleDiv, #HeroDiv, #adminDiv").hide();
       }
     };
-
-  
   </script>
 
 
@@ -494,7 +372,6 @@ if (window.ethereum) {
                 </div>
                 </div>
             `).show();
-//<button class="btn btn-primary back-btn">Back</button>
             // Back button functionality
             $('.back-btn').click(function() {
                 $('#detailedPost').hide();
