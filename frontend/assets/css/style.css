@@ -13,15 +13,13 @@
 }
 
 /*added from hmtl*/
- /* Style for genrePostsContainer */
 
  #genrePostsContainer {
   display: flex;
   flex-wrap: wrap;
-  /*justify-content: space-around;
-  margin-top: 10px; *//* Reduced margin */
 }
-.card-container {
+.card-container,
+.card-container2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -30,7 +28,6 @@
 }
 
 .card {
-  /* Your existing card styles */
   width: 300px;
   margin-bottom: 10px; /* Check and adjust this value */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -110,8 +107,6 @@
 }
 /*ADDED FROM HTML*/
 /*login*/
-/* Centered and Smaller LoginDiv styles */
-/* Centered LoginDiv styles */
 #LoginDiv {
   position: absolute;
   top: 50%;
@@ -206,7 +201,6 @@
   font-weight: bold; /* Make the headers bold */
 }
 /*end admin*/
-/*NEW ADDED*/
 
 .button-container {
   display: flex;

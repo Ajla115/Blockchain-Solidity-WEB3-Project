@@ -440,7 +440,7 @@ else{
         `;
 
         postsContainer.append(postCard);
-
+    
         $('#' + postId + ' .read-more-btn').click(function() {
             // Hide the short version of post, and show the longer one
             $('#' + postId).hide();
