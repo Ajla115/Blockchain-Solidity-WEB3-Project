@@ -91,7 +91,7 @@ $(document).ready(function () {
                     </div>
                     <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
                     <h3>${post.title}</h3>
-                    <p>${post.content}</p>
+                    <p style="text-align: justify;">${post.content}</p>
                     <button class="btn btn-primary back-btn">Back</button>
                     </div>
                 </div>
@@ -108,28 +108,27 @@ $(document).ready(function () {
 
     //Function to display Tech posts in its genre
     async function displayPostsByGenre2(genre) {
-    let posts = await contract.methods.getAllPostsPerGenre(genre).call();
-    
-    let postsContainer = $('#genrePostsContainer2');
-    postsContainer.empty();
+        let posts = await contract.methods.getAllPostsPerGenre(genre).call();
+        let postsContainer = $('#genrePostsContainer2');
+        postsContainer.empty();
 
-    posts.forEach((post, index) => {
-        let postId = 'post_' + index;
-        let postCard = `
+        posts.forEach((post, index) => {
+            let postId = 'post2_' + index; // Every class has to be different from Lifestyle's classes
+            let postCard = `
             <div class="card" id="${postId}">
               <div class="card-header">${post.genre}</div>
               <div class="card-body">
                 <h5 class="card-title">${post.title}</h5>
-                <button class="btn btn-primary read-more-btn">Read More</button>
+                <button class="btn btn-primary read-more-btn2">Read More</button> <!-- Unique class for read more button -->
               </div>
             </div>
         `;
 
-        postsContainer.append(postCard);
+            postsContainer.append(postCard);
 
-        $('#' + postId + ' .read-more-btn').click(function() {
-            // Hide the short version of post, and show the longer one
-            $('#' + postId).hide();
+            $('#' + postId + ' .read-more-btn2').click(function() { // Specific selector for read more button
+                // Hide the short version of post, and show the longer one
+                $('#' + postId).hide();
 
             // Show the detailed post content
             $('#detailedPost2').html(`
@@ -139,14 +138,14 @@ $(document).ready(function () {
                     </div>
                     <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
                     <h3>${post.title}</h3>
-                    <p>${post.content}</p>
-                    <button class="btn btn-primary back-btn">Back</button>
+                    <p style="text-align: justify;">${post.content}</p>
+                    <button class="btn btn-primary back-btn2">Back</button> <!-- Unique class for back button -->
                     </div>
                 </div>
             `).show();
 
             // Back button functionality
-            $('.back-btn').click(function() {
+            $('.back-btn2').click(function() { 
                 $('#detailedPost2').hide();
                 $('#' + postId).show();
             });
@@ -405,7 +404,7 @@ else{
                  </div>
                  <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
                  <h3>${post.title}</h3>
-                 <p>${post.content}</p>
+                 <p style="text-align: justify;">${post.content}</p>
                  <button class="btn btn-primary back-btn">Back</button>
                  </div>
              </div>
@@ -420,30 +419,29 @@ else{
     });
     }
 
-    //Function to display Tech posts in its genre
-    async function displayPostsByGenre2(genre) {
+     //Function to display Tech posts in its genre
+     async function displayPostsByGenre2(genre) {
         let posts = await contract.methods.getAllPostsPerGenre(genre).call();
-    
         let postsContainer = $('#genrePostsContainer2');
         postsContainer.empty();
 
         posts.forEach((post, index) => {
-        let postId = 'post_' + index;
-        let postCard = `
+            let postId = 'post2_' + index; // Every class has to be different from Lifestyle's classes
+            let postCard = `
             <div class="card" id="${postId}">
               <div class="card-header">${post.genre}</div>
               <div class="card-body">
                 <h5 class="card-title">${post.title}</h5>
-                <button class="btn btn-primary read-more-btn">Read More</button>
+                <button class="btn btn-primary read-more-btn2">Read More</button> <!-- Unique class for read more button -->
               </div>
             </div>
         `;
 
-        postsContainer.append(postCard);
-    
-        $('#' + postId + ' .read-more-btn').click(function() {
-            // Hide the short version of post, and show the longer one
-            $('#' + postId).hide();
+            postsContainer.append(postCard);
+
+            $('#' + postId + ' .read-more-btn2').click(function() { // Specific selector for read more button
+                // Hide the short version of post, and show the longer one
+                $('#' + postId).hide();
 
             // Show the detailed post content
             $('#detailedPost2').html(`
@@ -453,14 +451,14 @@ else{
                     </div>
                     <div class="col-lg-6 pt-4 pt-lg-0 order-2 order-lg-1">
                     <h3>${post.title}</h3>
-                    <p>${post.content}</p>
-                    <button class="btn btn-primary back-btn">Back</button>
+                    <p style="text-align: justify;" >${post.content}</p>
+                    <button class="btn btn-primary back-btn2">Back</button> <!-- Unique class for back button -->
                     </div>
                 </div>
             `).show();
 
             // Back button functionality
-            $('.back-btn').click(function() {
+            $('.back-btn2').click(function() { 
                 $('#detailedPost2').hide();
                 $('#' + postId).show();
             });
